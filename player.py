@@ -2,9 +2,9 @@
 #-*- coding: utf-8 -*-
 from card import *
 from hanabi import Hanabi
+from random import randint
 
-
-class Player:
+class Player(object):
     def __init__(self, handSize, table):
         self.handCapacity = handSize
         self.hand = []
@@ -81,3 +81,49 @@ class Player:
 
     def getHandCapacity(self):
         return self.handCapacity
+
+
+class PlayerRandom(Player):
+    def __init__(self, handSize, table):
+        Player.__init__(self, handSize, table)
+
+    def promptAction(self, players):
+        # validAction is a boolean that loops on
+        # the menu while the action is invalid
+        validAction = False
+        randAction = randint(0, 2)
+
+        while not validAction:
+            validAction = True
+            print("--------------")
+            print("Choosing random play ")
+            if randAction == 0:
+                print("Playing...")
+                randCard = randint(0, self.handCapacity - 1)
+                self.play(self.hand[randCard])
+                self.drawFrom(Hanabi.deck)
+            elif randAction == 1:
+                print('Choosing random player for hint')
+                print("*****", len(Hanabi.players))
+                randTarget = Hanabi.players[randint(0, len(Hanabi.players))]
+                if Hanabi.table.hintsLeft() and randTarget != self:
+                    Hanabi.table.useHint()
+                    print("Choosing type (suit or value)...")
+                    randType = randint(0, 1)
+                    if randType == 0:
+                        print("Choosing random suit...")
+                        randSuit = randint(0, 4)
+                        randTarget.giveSuitHint(randSuit)
+                    elif randType == 1:
+                        print("Choosing random value...")
+                        randValue = randint(0, 4)
+                        randRarget.giveValueHint(randValue)
+                else:
+                    validAction = False
+            elif randAction == 2:
+                print("Discarding...")
+                randDiscard = randint(0, self.handCapacity - 1)
+                self.discard(self.hand[randDiscard])
+                self.drawFrom(Hanabi.deck)
+            else:
+                validAction = False
