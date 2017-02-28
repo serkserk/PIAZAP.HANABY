@@ -31,9 +31,10 @@ class Hanabi:
             cls.table.display(cls.players, turn % len(cls.players))
             currentPlayer.promptAction(cls.players)
             turn += 1
+            print("Current score : ", cls.table.getScore())
             print()
 
-        print("Score : ", cls.table.getScore())
+        print("Final score : ", cls.table.getScore())
 
     @classmethod
     def initPlayers(cls):

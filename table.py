@@ -31,8 +31,8 @@ class Table:
         return self.strikes > 0
 
     def display(self, players, currentPlayerIndex):
-        print("Hints :\t", self.hints)
-        print("Strikes :\t", self.strikes)
+        print("Hints : ", self.hints)
+        print("Strikes : ", self.strikes)
         self.displayField()
         for player in players:
             if player == players[currentPlayerIndex]:
