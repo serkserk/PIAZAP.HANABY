@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-from random import shuffle
+from random import *
 from suit import *
 from card import *
 
@@ -22,7 +22,8 @@ class Deck:
             self.deck.append(Card(s, 5))
 
     def shuffle(self):
-        shuffle(self.deck)
+        # seed = randint(0, 10)
+        Random(2).shuffle(self.deck)
 
     def draw(self):
         if not self.empty():

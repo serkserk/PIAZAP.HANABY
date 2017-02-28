@@ -39,18 +39,18 @@ class Hanabi:
     def initPlayers(cls):
         playerType = Hanabi.promptPlayerType()
         handSize = Hanabi.promptHandSize()
-        if playerType == "human":
+        if playerType == "1":
             for i in range(Hanabi.promptPlayers()):
                 cls.players.append(Player(handSize, cls.table))
                 cls.players[i].drawFrom(cls.deck)
-        elif playerType == "random":
+        elif playerType == "2":
             for i in range(Hanabi.promptPlayers()):
                 cls.players.append(PlayerRandom(handSize, cls.table))
                 cls.players[i].drawFrom(cls.deck)
 
     @classmethod
     def promptPlayerType(cls):
-        return input("human or random? ")
+        return input("human(1) or random(2)? ")
 
     @classmethod
     def promptHandSize(cls):
@@ -59,10 +59,6 @@ class Hanabi:
     @classmethod
     def promptPlayers(cls):
         return int(input("How many players? "))
-
-    def getPlayersNumber(cls):
-        print(len(cls.players))
-        return len(cls.players)
 
 
 if __name__ == '__main__':

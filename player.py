@@ -4,6 +4,7 @@ from card import *
 from hanabi import Hanabi
 from random import randint
 
+
 class Player(object):
     def __init__(self, handSize, table):
         self.handCapacity = handSize
