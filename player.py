@@ -37,6 +37,7 @@ class Player(object):
     def discard(self, c):
         self.knownHand.remove(self.knownHand[self.hand.index(c)])
         self.hand.remove(c)
+        Hanabi.table.placeDiscard(c)
         Hanabi.table.rechargeHint()
 
     def promptAction(self, players):
