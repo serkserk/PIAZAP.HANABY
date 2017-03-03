@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 from enum import Enum
+import colorama
 
 
 class Suit(Enum):
@@ -11,6 +12,20 @@ class Suit(Enum):
     green = 4
     yellow = 5
     unknown = 6
+
+    def toColor(suit):
+        if suit == Suit.white:
+            return colorama.Fore.WHITE
+        elif suit == Suit.red:
+            return colorama.Fore.RED
+        elif suit == Suit.blue:
+            return colorama.Fore.BLUE
+        elif suit == Suit.green:
+            return colorama.Fore.GREEN
+        elif suit == Suit.yellow:
+            return colorama.Fore.YELLOW
+        else:
+            return colorama.Fore.WHITE
 
     @classmethod
     def valueOf(cls, string):

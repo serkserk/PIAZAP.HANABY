@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 from suit import *
+from bcolor import *
 
 
 class Card:
@@ -21,4 +22,4 @@ class Card:
         self.value = value
 
     def toString(self):
-        return Suit.toString(self.suit) + " " + str(self.value)
+        return Suit.toColor(self.suit) + " " + Suit.toString(self.suit) + " " + str(self.value) + bcolor.END

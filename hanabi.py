@@ -3,6 +3,8 @@
 from deck import *
 from table import *
 from player import *
+from bcolor import *
+import colorama
 
 
 class Hanabi:
@@ -23,7 +25,13 @@ class Hanabi:
 
     @classmethod
     def main(cls):
+
+        colorama.init()
+        print(bcolor.CLEAR)    # clear the screen
+
         Hanabi.initPlayers()
+        print()
+        print()
 
         turn = 0
         while(cls.table.strikesLeft() and (not cls.deck.empty() or turn % len(cls.players) != 0)):
@@ -31,10 +39,10 @@ class Hanabi:
             cls.table.display(cls.players, turn % len(cls.players))
             currentPlayer.promptAction(cls.players)
             turn += 1
-            print("Current score : ", cls.table.getScore())
+            print("Score after play: ", cls.table.getScore())
             print()
 
-        print("Final score : ", cls.table.getScore())
+        print("Final score: ", cls.table.getScore())
 
     @classmethod
     def initPlayers(cls):
@@ -52,19 +60,19 @@ class Hanabi:
 
     @classmethod
     def promptPlayerType(cls):
-        print("Human(1) or random(2)? ", end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "Human(1) or random(2)? " + bcolor.END, end='')
         playerType = input()
         return int(playerType)
 
     @classmethod
     def promptHandSize(cls):
-        print("Hand size : ", end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "Hand size : " + bcolor.END, end='')
         handSize = input()
         return int(handSize)
 
     @classmethod
     def promptPlayers(cls):
-        print("How many players? ", end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "How many players? " + bcolor.END, end='')
         playersNumber = input()
         return int(playersNumber)
 

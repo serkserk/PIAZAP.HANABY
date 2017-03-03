@@ -1,6 +1,8 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 from suit import *
+import colorama
+from bcolor import *
 
 
 class Table:
@@ -17,6 +19,7 @@ class Table:
             self.field[c.getSuit()] = self.field[c.getSuit()] + 1
         else:
             self.strikes -= 1
+            print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + bcolor.END)
 
     def placeDiscard(self, c):
         self.discarded.append(c)
@@ -39,6 +42,7 @@ class Table:
         print("Strikes : ", self.strikes)
         self.displayField()
         self.displayDiscarded()
+        print("Hands:")
         for player in players:
             if player == players[currentPlayerIndex]:
                 player.displayKnownHand()
@@ -55,9 +59,9 @@ class Table:
         print("Discarded :")
         if len(self.discarded) == 0:
             print("*no discard yet*")
-        for card in self.discarded:
-            print(card.toString(), end=" \t")
-        print()
+        else:
+            for card in self.discarded:
+                print(card.toString(), end="  ")
 
     def getScore(self):
         return sum(self.field.values())
