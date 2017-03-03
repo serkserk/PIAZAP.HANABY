@@ -48,23 +48,35 @@ class Player(object):
         while not validAction:
             validAction = True
             print("--------------")
-            answer = input("What do you want to do? ")
+            print("What do you want to do? ", end='')
+            answer = input()
             if answer == "play":
-                self.play(self.hand[int(input("which card? "))])
+                print("which card? ", end='')
+                answerCard = input()
+                self.play(self.hand[int(answerCard)])
                 self.drawFrom(Hanabi.deck)
             elif answer == "hint":
-                target = players[int(input("which player? "))]
+                print("which player? ", end='')
+                answerPlayer = input()
+                target = players[int(answerPlayer)]
                 if Hanabi.table.hintsLeft() and target != self:
                     Hanabi.table.useHint()
-                    hintType = input("what type? (suit/value) ")
-                    if hintType == "suit":
-                        target.giveSuitHint(Suit.valueOf(input("Which suit? ")))
-                    elif hintType == "value":
-                        target.giveValueHint(int(input("Which value? ")))
+                    print("what type? (suit/value) ", end='')
+                    answerHintType = input()
+                    if answerHintType == "suit":
+                        print("Which suit? ", end='')
+                        answerSuit = input()
+                        target.giveSuitHint(Suit.valueOf(answerSuit))
+                    elif answerHintType == "value":
+                        print("Which value? ", end='')
+                        answerValue = input()
+                        target.giveValueHint(int(answerValue))
                 else:
                     validAction = False
             elif answer == "discard":
-                self.discard(self.hand[int(input("Which card? "))])
+                print("Which card? ", end='')
+                answerCard = input()
+                self.discard(self.hand[int(answerCard)])
                 self.drawFrom(Hanabi.deck)
             else:
                 validAction = False
