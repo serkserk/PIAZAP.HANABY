@@ -19,7 +19,7 @@ class Table:
             self.field[c.getSuit()] = self.field[c.getSuit()] + 1
         else:
             self.strikes -= 1
-            print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + bcolor.END)
+            print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
 
     def placeDiscard(self, c):
         self.discarded.append(c)

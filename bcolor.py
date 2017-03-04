@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 
-class bcolor:
+class Bcolor:
     BLUE = '\033[94m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'

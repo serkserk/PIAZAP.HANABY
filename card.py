@@ -22,4 +22,4 @@ class Card:
         self.value = value
 
     def toString(self):
-        return Suit.toColor(self.suit) + " " + Suit.toString(self.suit) + " " + str(self.value) + bcolor.END
+        return Suit.toColor(self.suit) + " " + Suit.toString(self.suit) + " " + str(self.value) + Bcolor.END
