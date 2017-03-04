@@ -118,7 +118,7 @@ class PlayerRandom(Player):
             elif randAction == 1:
                 print('Choosing random player for hint')
                 print("*****", len(hanabi.Hanabi.players))
-                randTarget = hanabi.Hanabi.players[randint(0, len(hanabi.Hanabi.players))]
+                randTarget = hanabi.Hanabi.players[randint(0, len(hanabi.Hanabi.players) - 1)]
                 if hanabi.Hanabi.table.hintsLeft() and randTarget != self:
                     hanabi.Hanabi.table.useHint()
                     print("Choosing type (suit or value)...")
