@@ -40,10 +40,14 @@ class Hanabi:
             for i in range(playersNumber):
                 cls.players.append(PlayerRandomPlus(handSize))
                 cls.players[i].drawFrom(cls.deck)
+        elif playerType == 4:
+            for i in range(playersNumber):
+                cls.players.append(PlayerRandomPlusPlus(handSize))
+                cls.players[i].drawFrom(cls.deck)
 
     @classmethod
     def promptPlayerType(cls):
-        print(colorama.Fore.LIGHTBLUE_EX + "Human(1), random(2) or randomPlus(3)? " + Bcolor.END, end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "Human(1), random(2), random+(3) or random++(4)? " + Bcolor.END, end='')
         playerType = input()
         return int(playerType)
 

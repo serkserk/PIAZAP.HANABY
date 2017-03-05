@@ -156,3 +156,38 @@ class PlayerRandomPlus(Player):
                 self.drawFrom(hanabi.Hanabi.deck)
             else:
                 validAction = False
+
+
+class PlayerRandomPlusPlus(Player):
+    def __init__(self, handSize):
+        Player.__init__(self, handSize)
+
+    def promptAction(self, players):
+        # validAction is a boolean that loops on
+        # the menu while the action is invalid
+        validAction = False
+
+        while not validAction:
+            randAction = randint(0, 1)
+            validAction = True
+            print("--------------")
+            print("Choosing random play ")
+            if randAction == 0:
+                randCard = randint(0, self.handCapacity - 1)
+                if not hanabi.Hanabi.table.cardPlayable(self.hand[randCard]):
+                    validAction = False
+                    print(colorama.Fore.CYAN + "Can't play..." + Bcolor.END)
+                else:
+                    print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
+                    self.play(self.hand[randCard])
+                    self.drawFrom(hanabi.Hanabi.deck)
+            elif randAction == 1:
+                randCard = randint(0, self.handCapacity - 1)
+                if not hanabi.Hanabi.table.cardDiscardable(self.hand[randCard]):
+                    pass
+                randDiscard = randint(0, self.handCapacity - 1)
+                print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding... " + Bcolor.END)
+                self.discard(self.hand[randDiscard])
+                self.drawFrom(hanabi.Hanabi.deck)
+            else:
+                validAction = False

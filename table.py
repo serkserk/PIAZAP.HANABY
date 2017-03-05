@@ -69,3 +69,31 @@ class Table:
 
     def cardPlayable(self, card):
         return self.field[card.getSuit()] == card.getValue() + 1
+
+    def cardDiscardable(self, card):
+        for dCard in self.discarded:
+            if card.getValue() == 1:
+                compt1 = 0
+                for dCard in self.discarded:
+                    if card.getSuit() == dCard.getSuit():
+                        if compt1 == 2:
+                            return False
+                    else:
+                        compt1 += 1
+            elif card.getValue() == 2 or card.getValue() == 3 or card.getValue() == 4:
+                compt234 = 0
+                for dCard in self.discarded:
+                    if card.getSuit() == dCard.getSuit():
+                        if compt234 == 2:
+                            return False
+                        else:
+                            compt234 += 1
+            elif card.getValue() == 5:
+                compt5 = 0
+                for dCard in self.discarded:
+                    if card.getSuit() == dCard.getSuit():
+                        if compt5 == 1:
+                            return False
+                        else:
+                            compt5 += 1
+        return True
