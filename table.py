@@ -62,6 +62,7 @@ class Table:
         else:
             for card in self.discarded:
                 print(card.toString(), end="  ")
+        print()
 
     def getScore(self):
         return sum(self.field.values())

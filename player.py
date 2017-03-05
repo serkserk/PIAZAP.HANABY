@@ -3,6 +3,8 @@
 from card import *
 import hanabi
 from random import randint
+from bcolor import *
+import colorama
 
 
 class Player(object):
@@ -104,37 +106,19 @@ class PlayerRandom(Player):
         # validAction is a boolean that loops on
         # the menu while the action is invalid
         validAction = False
-        randAction = randint(0, 2)
+        randAction = randint(0, 1)
 
         while not validAction:
             validAction = True
             print("--------------")
             print("Choosing random play ")
             if randAction == 0:
-                print("Playing...")
+                print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
                 randCard = randint(0, self.handCapacity - 1)
                 self.play(self.hand[randCard])
                 self.drawFrom(hanabi.Hanabi.deck)
             elif randAction == 1:
-                print('Choosing random player for hint')
-                print("*****", len(hanabi.Hanabi.players))
-                randTarget = hanabi.Hanabi.players[randint(0, len(hanabi.Hanabi.players) - 1)]
-                if hanabi.Hanabi.table.hintsLeft() and randTarget != self:
-                    hanabi.Hanabi.table.useHint()
-                    print("Choosing type (suit or value)...")
-                    randType = randint(0, 1)
-                    if randType == 0:
-                        print("Choosing random suit...")
-                        randSuit = randint(0, 4)
-                        randTarget.giveSuitHint(randSuit)
-                    elif randType == 1:
-                        print("Choosing random value...")
-                        randValue = randint(0, 4)
-                        randTarget.giveValueHint(randValue)
-                else:
-                    validAction = False
-            elif randAction == 2:
-                print("Discarding...")
+                print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding... " + Bcolor.END)
                 randDiscard = randint(0, self.handCapacity - 1)
                 self.discard(self.hand[randDiscard])
                 self.drawFrom(hanabi.Hanabi.deck)
