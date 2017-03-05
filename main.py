@@ -1,6 +1,7 @@
 from hanabi import Hanabi
 from bcolor import Bcolor
 import colorama
+import sys
 
 
 def main():
@@ -24,4 +25,6 @@ def main():
 
 
 if __name__ == '__main__':
+    if len(sys.argv) == 2:
+        sys.stdin = open(sys.argv[1])
     main()
