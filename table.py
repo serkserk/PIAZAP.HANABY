@@ -66,3 +66,6 @@ class Table:
 
     def getScore(self):
         return sum(self.field.values())
+
+    def cardPlayable(self, card):
+        return self.field[card.getSuit()] == card.getValue() + 1
