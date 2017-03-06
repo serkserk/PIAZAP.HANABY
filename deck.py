@@ -23,7 +23,8 @@ class Deck:
 
     def shuffle(self):
         # seed = randint(0, 10)
-        Random(2).shuffle(self.deck)
+        # Random(2).shuffle(self.deck)
+        shuffle(self.deck)
 
     def draw(self):
         if not self.empty():

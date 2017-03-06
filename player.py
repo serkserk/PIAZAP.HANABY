@@ -131,31 +131,46 @@ class PlayerRandomPlus(Player):
         Player.__init__(self, handSize)
 
     def promptAction(self, players):
+        nbcard = 0  # index of current card
+        print("--------------")
+        print("Trying to play... ")
+        for card in self.hand:
+            if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
+                self.play(self.hand[nbcard])
+                self.drawFrom(hanabi.Hanabi.deck)
+                print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
+                return  # finish if played a  card
+            print(colorama.Fore.CYAN + "Could not play card: " + str(nbcard + 1) + Bcolor.END)
+            nbcard += 1
+        randDiscard = randint(0, self.handCapacity - 1)
+        print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding random card: " + str(randDiscard + 1) + Bcolor.END)
+        self.discard(self.hand[randDiscard])
+        self.drawFrom(hanabi.Hanabi.deck)
+
         # validAction is a boolean that loops on
         # the menu while the action is invalid
-        validAction = False
-
-        while not validAction:
-            randAction = randint(0, 1)
-            validAction = True
-            print("--------------")
-            print("Choosing random play ")
-            if randAction == 0:
-                randCard = randint(0, self.handCapacity - 1)
-                if not hanabi.Hanabi.table.cardPlayable(self.hand[randCard]):
-                    validAction = False
-                    print(colorama.Fore.CYAN + "Can't play..." + Bcolor.END)
-                else:
-                    print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
-                    self.play(self.hand[randCard])
-                    self.drawFrom(hanabi.Hanabi.deck)
-            elif randAction == 1:
-                print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding... " + Bcolor.END)
-                randDiscard = randint(0, self.handCapacity - 1)
-                self.discard(self.hand[randDiscard])
-                self.drawFrom(hanabi.Hanabi.deck)
-            else:
-                validAction = False
+        # validAction = False
+        # while not validAction:
+        #     randAction = randint(0, 1)
+        #     validAction = True
+        #     print("--------------")
+        #     print("Choosing random play ")
+        #     if randAction == 0:
+        #         randCard = randint(0, self.handCapacity - 1)
+        #         if not hanabi.Hanabi.table.cardPlayable(self.hand[randCard]):
+        #             validAction = False
+        #             print(colorama.Fore.CYAN + "Can't play..." + Bcolor.END)
+        #         else:
+        #             print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
+        #             self.play(self.hand[randCard])
+        #             self.drawFrom(hanabi.Hanabi.deck)
+        #     elif randAction == 1:
+        #         print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding... " + Bcolor.END)
+        #         randDiscard = randint(0, self.handCapacity - 1)
+        #         self.discard(self.hand[randDiscard])
+        #         self.drawFrom(hanabi.Hanabi.deck)
+        #     else:
+        #         validAction = False
 
 
 class PlayerRandomPlusPlus(Player):
@@ -163,31 +178,57 @@ class PlayerRandomPlusPlus(Player):
         Player.__init__(self, handSize)
 
     def promptAction(self, players):
+        nbcard = 0  # index of current card
+        print("--------------")
+        print("Trying to play... ")
+        for card in self.hand:
+            if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
+                self.play(self.hand[nbcard])
+                self.drawFrom(hanabi.Hanabi.deck)
+                print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
+                return  # finish if played a  card
+            print(colorama.Fore.CYAN + "Could not play card: " + str(nbcard + 1) + Bcolor.END)
+            nbcard += 1
+        nbcard = 0
+        for card in self.hand:
+            if hanabi.Hanabi.table.cardDiscardable(self.hand[nbcard]):
+                print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding card: " + str(nbcard + 1) + Bcolor.END)
+                self.discard(self.hand[nbcard])
+                self.drawFrom(hanabi.Hanabi.deck)
+                return  # finish if discarded a  card
+            print(colorama.Fore.LIGHTMAGENTA_EX + "Could not discard card: " + str(nbcard + 1) + Bcolor.END)
+            nbcard += 1
+        else:  # discard a random card if cant find a discardable card
+            randDiscard = randint(0, self.handCapacity - 1)
+            print(colorama.Fore.LIGHTMAGENTA_EX + "Could not find discardable card, random card: " + str(randDiscard) + Bcolor.END)
+            self.discard(self.hand[randDiscard])
+            self.drawFrom(hanabi.Hanabi.deck)
+
         # validAction is a boolean that loops on
         # the menu while the action is invalid
-        validAction = False
-
-        while not validAction:
-            randAction = randint(0, 1)
-            validAction = True
-            print("--------------")
-            print("Choosing random play ")
-            if randAction == 0:
-                randCard = randint(0, self.handCapacity - 1)
-                if not hanabi.Hanabi.table.cardPlayable(self.hand[randCard]):
-                    validAction = False
-                    print(colorama.Fore.CYAN + "Can't play..." + Bcolor.END)
-                else:
-                    print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
-                    self.play(self.hand[randCard])
-                    self.drawFrom(hanabi.Hanabi.deck)
-            elif randAction == 1:
-                randCard = randint(0, self.handCapacity - 1)
-                if not hanabi.Hanabi.table.cardDiscardable(self.hand[randCard]):
-                    pass
-                randDiscard = randint(0, self.handCapacity - 1)
-                print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding... " + Bcolor.END)
-                self.discard(self.hand[randDiscard])
-                self.drawFrom(hanabi.Hanabi.deck)
-            else:
-                validAction = False
+        # validAction = False
+        # while not validAction:
+        #     randAction = randint(0, 1)
+        #     validAction = True
+        #     print("--------------")
+        #     print("Choosing random play ")
+        #     if randAction == 0:
+        #         randCard = randint(0, self.handCapacity - 1)
+        #         if not hanabi.Hanabi.table.cardPlayable(self.hand[randCard]):
+        #             validAction = False
+        #             print(colorama.Fore.CYAN + "Can't play..." + Bcolor.END)
+        #         else:
+        #             print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
+        #             self.play(self.hand[randCard])
+        #             self.drawFrom(hanabi.Hanabi.deck)
+        #     elif randAction == 1:
+        #         randCard = randint(0, self.handCapacity - 1)
+        #         if not hanabi.Hanabi.table.cardDiscardable(self.hand[randCard]):
+        #             print(colorama.Fore.LIGHTMAGENTA_EX + "Can't discard... " + Bcolor.END)
+        #         else:
+        #             randDiscard = randint(0, self.handCapacity - 1)
+        #             print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding... " + Bcolor.END)
+        #             self.discard(self.hand[randDiscard])
+        #             self.drawFrom(hanabi.Hanabi.deck)
+        #     else:
+        #         validAction = False

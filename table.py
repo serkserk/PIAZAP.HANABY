@@ -68,14 +68,16 @@ class Table:
         return sum(self.field.values())
 
     def cardPlayable(self, card):
-        return self.field[card.getSuit()] == card.getValue() + 1
+        return self.field[card.getSuit()] == card.getValue() - 1
 
     def cardDiscardable(self, card):
         for dCard in self.discarded:
             if card.getValue() == 1:
+                card1 = []
                 compt1 = 0
                 for dCard in self.discarded:
-                    if card.getSuit() == dCard.getSuit():
+                    if card.getSuit() == dCard.getSuit() and card.getValue() == dCard.getValue():
+                        card1.append(dCard)
                         if compt1 == 2:
                             return False
                     else:
