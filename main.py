@@ -21,7 +21,7 @@ def main():
             print("Score after play: ", Hanabi.table.getScore())
             print()
 
-        print("Final score: ", Hanabi.table.getScore())
+        print("Final score: ", Hanabi.table.getScore(), " in ", turn, " turn !")
 
 
 if __name__ == '__main__':
