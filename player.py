@@ -15,7 +15,7 @@ class Player(object):
 
     def drawFrom(self, deck):
         missingCards = self.handCapacity - len(self.hand)
-        while (missingCards > 0):
+        while (missingCards > 0 and not deck.empty()):
             self.hand.append(deck.draw())
             self.knownHand.append(Card())
             missingCards -= 1
