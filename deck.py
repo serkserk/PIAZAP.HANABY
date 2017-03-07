@@ -36,3 +36,6 @@ class Deck:
 
     def empty(self):
         return len(self.deck) <= 0
+
+    def cardsLeft(self):
+        return len(self.deck)

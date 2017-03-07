@@ -5,23 +5,23 @@ import sys
 
 
 def main():
-        colorama.init()
-        print(Bcolor.CLEAR)    # clear the screen
+    colorama.init()
+    print(Bcolor.CLEAR)    # clear the screen
 
-        Hanabi.initPlayers()
+    Hanabi.initPlayers()
+    print()
+    print()
+
+    turn = 0
+    while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
+        currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
+        Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
+        currentPlayer.promptAction(Hanabi.players)
+        turn += 1
+        print("Score after play: ", Hanabi.table.getScore())
         print()
-        print()
 
-        turn = 0
-        while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0)):
-            currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
-            Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
-            currentPlayer.promptAction(Hanabi.players)
-            turn += 1
-            print("Score after play: ", Hanabi.table.getScore())
-            print()
-
-        print("Final score: ", Hanabi.table.getScore(), " in ", turn, " turn !")
+    print("Final score: ", Hanabi.table.getScore(), " in ", turn, " turn !")
 
 
 if __name__ == '__main__':

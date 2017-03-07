@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 from suit import *
+import hanabi
 import colorama
 from bcolor import *
 
@@ -13,11 +14,11 @@ class Table:
             self.field[s] = 0
         self.hints = 8
         self.strikes = 3
-        self.discardedDict = {'w1':0,'w2':0,'w3':0,'w4':0,'w5':0,
-        'b1':0,'b2':0,'b3':0,'b4':0,'b5':0,
-        'r1':0,'r2':0,'r3':0,'r4':0,'r5':0,
-        'g1':0,'g2':0,'g3':0,'g4':0,'g5':0,
-        'y1':0,'y2':0,'y3':0,'y4':0,'y5':0,}
+        self.discardedDict = {'w1': 0, 'w2': 0, 'w3': 0, 'w4': 0, 'w5': 0,
+                              'b1': 0, 'b2': 0, 'b3': 0, 'b4': 0, 'b5': 0,
+                              'r1': 0, 'r2': 0, 'r3': 0, 'r4': 0, 'r5': 0,
+                              'g1': 0, 'g2': 0, 'g3': 0, 'g4': 0, 'g5': 0,
+                              'y1': 0, 'y2': 0, 'y3': 0, 'y4': 0, 'y5': 0, }
 
     def place(self, c):
         if self.field[c.getSuit()] == c.getValue() - 1:
@@ -45,6 +46,7 @@ class Table:
     def display(self, players, currentPlayerIndex):
         print("Hints : ", self.hints)
         print("Strikes : ", self.strikes)
+        print("Cards left in deck : ", hanabi.Hanabi.deck.cardsLeft())
         self.displayField()
         self.displayDiscarded()
         print("Hands:")
@@ -120,7 +122,7 @@ class Table:
                 return True
         print("Usefull card")
         return False
-        
+
         # if card.getValue() <= self.field[card.getSuit()]:
         #     print("card.getValue() <= self.field[card.getSuit()]")
         #     return True
