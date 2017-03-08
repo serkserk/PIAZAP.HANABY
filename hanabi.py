@@ -20,9 +20,6 @@ class Hanabi:
     table = Table()
     players = []
 
-    def __init__(self):
-        pass
-
     @classmethod
     def initPlayers(cls):
         playersNumber = Hanabi.promptPlayers()
