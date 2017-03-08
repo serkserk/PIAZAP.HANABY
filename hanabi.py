@@ -25,25 +25,19 @@ class Hanabi:
 
     @classmethod
     def initPlayers(cls):
-        playerType = Hanabi.promptPlayerType()
         playersNumber = Hanabi.promptPlayers()
         handSize = Hanabi.promptHandSize()
-        if playerType == 1:
-            for i in range(playersNumber):
+        for i in range(playersNumber):
+            playerType = Hanabi.promptPlayerType()
+            if playerType == 1:
                 cls.players.append(Player(handSize))
-                cls.players[i].drawFrom(cls.deck)
-        elif playerType == 2:
-            for i in range(playersNumber):
+            elif playerType == 2:
                 cls.players.append(PlayerRandom(handSize))
-                cls.players[i].drawFrom(cls.deck)
-        elif playerType == 3:
-            for i in range(playersNumber):
+            elif playerType == 3:
                 cls.players.append(PlayerRandomPlus(handSize))
-                cls.players[i].drawFrom(cls.deck)
-        elif playerType == 4:
-            for i in range(playersNumber):
+            elif playerType == 4:
                 cls.players.append(PlayerRandomPlusPlus(handSize))
-                cls.players[i].drawFrom(cls.deck)
+            cls.players[i].drawFrom(cls.deck)
 
     @classmethod
     def promptPlayerType(cls):

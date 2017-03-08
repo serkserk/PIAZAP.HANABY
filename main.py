@@ -5,6 +5,8 @@ import sys
 
 
 def main():
+    """ main function. contains the game loop.
+    """
     colorama.init()
     print(Bcolor.CLEAR)    # clear the screen
 
@@ -25,6 +27,7 @@ def main():
 
 
 if __name__ == '__main__':
+    # inputs can be set to be read from a file with a command line argument containing the name of the file
     if len(sys.argv) == 2:
         sys.stdin = open(sys.argv[1])
     main()
