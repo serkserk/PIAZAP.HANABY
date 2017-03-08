@@ -17,6 +17,8 @@ class NeuralNetwork:
         """
         self.layers = []
         self.connexions = []
+        self.bias = []
+
         i = 0
         for layer in neuronsPerLayer:  # initializing neuron self.layers
             self.layers[i] = [0 for x in range(layer)]
@@ -24,3 +26,7 @@ class NeuralNetwork:
 
         for i in range(self.layers - 1):
             self.connexions[i] = [((random() * 20) - 10) for x in range(len(self.layers[i]) * len(self.layers[i + 1]))]
+
+        self.bias[0] = None
+        for i in range(1, len(neuronsPerLayer)):  # initializing bias layers
+            self.bias[i] = [((random() * 20) - 10) for x in range(neuronsPerLayer[i])]
