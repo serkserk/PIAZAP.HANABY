@@ -5,7 +5,7 @@ from bcolor import Bcolor
 import colorama
 import sys
 import os
-from statistics import median, mean
+from statistics import median, mean, stdev
 
 
 def main():
@@ -53,6 +53,7 @@ def main():
     print(Bcolor.BOLD + colorama.Fore.CYAN + "Scores from ", nbIte, " iterations: ", scoreArray, Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "mean: ", mean(scoreArray), Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "median:", median(scoreArray), Bcolor.END)
+    print(Bcolor.BOLD + colorama.Fore.CYAN + "standard deviation:", stdev(scoreArray), Bcolor.END)
 
 
 # Disable
