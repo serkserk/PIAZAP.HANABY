@@ -14,7 +14,7 @@ class NeuralNetwork:
             - connexions
     """
 
-    def __init__(self, neuronsPerLayer, learningStep):
+    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1):
         """ Constructor.
             Args:
                 - neuronsPerLayer : an array containing the number of neurons for each layer
@@ -106,6 +106,18 @@ class NeuralNetwork:
                     dh = oh * (1 - oh) * Whz * self.errorSignals[i + 1][k]
                     self.errorSignals[i][j] = max(dh, self.errorSignals[i][j])
 
+    def getOutput(self):
+        return self.layers[len(self.layers) - 1]
+
+    def trainHanabi(self, nIterations=10000):
+        n = nIterations
+        while n > 0:
+            self.compute(generateBadInstance())
+            self.backprop([0])
+            self.compute(generateGoodInstance())
+            self.backprop([1])
+            n -= 1
+
 
 def generateBadInstance():
     fireWork = Card()
@@ -133,3 +145,16 @@ def sigmoid(x):
     """ The sigmoid function
     """
     return 1 / (1 + math.exp(-x))
+
+
+if __name__ == '__main__':
+    nn = NeuralNetwork()
+    nn.train()
+    nn.compute([1, 3, 1, 4])
+    print(nn.getOutput())
+    nn.compute([1, 3, 2, 4])
+    print(nn.getOutput())
+    nn.compute([1, 3, 1, 3])
+    print(nn.getOutput())
+    nn.compute([1, 3, 2, 3])
+    print(nn.getOutput())
