@@ -115,7 +115,7 @@ def generateBadInstance():
         fireWork.setValue(randint(1, 5))
         card.setSuit(Suit(randint(1, 5)))
         card.setValue(randint(1, 5))
-    return (fireWork.getSuit, fireWork.getValue, card.getSuit, card.getValue)
+    return (fireWork.getSuit(), fireWork.getValue(), card.getSuit(), card.getValue())
 
 
 def generateGoodInstance():
@@ -126,7 +126,7 @@ def generateGoodInstance():
         fireWork.setValue(randint(1, 5))
         card.setSuit(Suit(randint(1, 5)))
         card.setValue(randint(1, 5))
-    return (fireWork.getSuit, fireWork.getValue, card.getSuit, card.getValue)
+    return (fireWork.getSuit(), fireWork.getValue(), card.getSuit(), card.getValue())
 
 
 def sigmoid(x):
