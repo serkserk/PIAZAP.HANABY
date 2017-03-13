@@ -28,20 +28,24 @@ class NeuralNetwork:
         self.biases = []                   # i.e. self.biases[i][j] is the bias for self.layers[i][j]
         self.step = learningStep           # the learning step, or Nu.
 
-        i = 0
         for layer in neuronsPerLayer:  # initializing neuron self.layers with zeroes
-            self.layers[i] = [0 for x in range(layer)]
-            i += 1
+            self.layers.append([])
+            for x in range(layer):
+                self.layers[len(self.layers) - 1].append(0)
 
-        for i in range(self.layers - 1):  # initializing connexions with random real values [-10, 10]
-            self.connexions[i] = [((random() * 20) - 10) for x in range(len(self.layers[i]) * len(self.layers[i + 1]))]
+        for i in range(len(self.layers) - 1):  # initializing connexions with random real values [-10, 10]
+            self.connexions.append([])
+            for x in range(len(self.layers[i]) * len(self.layers[i + 1])):
+                self.connexions[i].append(random() * 20 - 10)
             # the connexion from self.layers[i][j] to self.layers[i-1][k] is self.connexions[i-1][k*len(self.layers[i])+j]
             # the connexion from self.layers[i][j] to self.layers[i+1][k] is self.connexions[i][j*len(self.layers[i+1])+k]
             # the neurons corresponding to self.connexions[i][j] are self.layers[i][j/len(self.layers[i+1])] and self.layers[i+1][j%len(self.layers[i+1])]
 
-        self.biases[0] = None  # self.biases[0] corresponds to self.layers[0] which is the input layer ; however inputs do not have biases.
+        self.biases.append(None)  # self.biases[0] corresponds to self.layers[0] which is the input layer ; however inputs do not have biases.
         for i in range(1, len(neuronsPerLayer)):  # initializing bias layers with random real values [-10, 10]
-            self.biases[i] = [((random() * 20) - 10) for x in range(neuronsPerLayer[i])]
+            self.biases.append([])
+            for x in range(neuronsPerLayer[i]):
+                self.biases[i].append(random() * 20 - 10)
 
     def compute(self, input):
         """ Output value computation method.
@@ -55,7 +59,7 @@ class NeuralNetwork:
         self.layers[0] = input
 
         for i in range(1, len(self.layers)):  # for each layer except input layer
-            for j in range(self.layers[i]):   # for each neuron
+            for j in range(len(self.layers[i])):   # for each neuron
                 netj = 0                      # this is the raw value of the neuron (before it's passed to the sigmoid)
                 for k in range(len(self.layers[i - 1])):  # for each connexion of the current neuron to the neurons of the previous layer
                     netj += self.layers[i - 1][k] * self.connexions[i - 1][k * len(self.layers[i]) + j]  # netj += value * connexion
@@ -80,14 +84,14 @@ class NeuralNetwork:
             errorSignals.append(a)
 
         # Backprop on the last layer
-        for k in range(targetValues):
+        for k in range(len(targetValues)):
             # error signal dk = (Tk-Ok) f'(Netk) = (Tk-Ok) f(Netk) (1-f(Netk)) = (Tk-Ok) Ok (1-Ok)
             dk = (targetValues[k] - outputLayer[k]) * outputLayer[k] * (1 - outputLayer[k])
             errorSignals[len(errorSignals) - 1][k] = dk
             for j in range(len(self.layers[len(self.layers) - 2])):  # for each neuron in the second-to-last layer
                 # connexion from current neuron of the second-to-last layer to current output neuron
                 WjkOld = self.connexions[len(self.layers) - 2][j * len(self.layers[len(self.layers) - 1]) + k]
-                WjkNew = WjkOld + self.learningStep * dk * self.layers[len(self.layers) - 2][j]  # Wjk_old + Nu * Dk * Oj
+                WjkNew = WjkOld + self.step * dk * self.layers[len(self.layers) - 2][j]  # Wjk_old + Nu * Dk * Oj
                 self.connexions[len(self.layers) - 2][j * len(self.layers[len(self.layers) - 1]) + k] = WjkNew
 
         # backprop on the rest of the network
@@ -96,15 +100,15 @@ class NeuralNetwork:
                 for k in range(len(self.layers[i + 1])):
                     # update connexion
                     WhzOld = self.connexions[i][j * len(self.layers[i + 1]) + k]
-                    dk = self.errorSignals[i + 1][k]
-                    WhzNew = WhzOld + self.learningStep * dk * self.layers[i][j]
+                    dk = errorSignals[i + 1][k]
+                    WhzNew = WhzOld + self.step * dk * self.layers[i][j]
                     self.connexions[i][j * len(self.layers[i + 1]) + k] = WhzNew
 
                     # determine error signal for current neuron
                     oh = self.layers[i][j]
                     Whz = self.connexions[i][j * len(self.layers[i + 1]) + k]
-                    dh = oh * (1 - oh) * Whz * self.errorSignals[i + 1][k]
-                    self.errorSignals[i][j] = max(dh, self.errorSignals[i][j])
+                    dh = oh * (1 - oh) * Whz * errorSignals[i + 1][k]
+                    errorSignals[i][j] = max(dh, errorSignals[i][j])
 
     def getOutput(self):
         return self.layers[len(self.layers) - 1]
@@ -127,7 +131,7 @@ def generateBadInstance():
         fireWork.setValue(randint(1, 5))
         card.setSuit(Suit(randint(1, 5)))
         card.setValue(randint(1, 5))
-    return (fireWork.getSuit(), fireWork.getValue(), card.getSuit(), card.getValue())
+    return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
 def generateGoodInstance():
@@ -138,7 +142,7 @@ def generateGoodInstance():
         fireWork.setValue(randint(1, 5))
         card.setSuit(Suit(randint(1, 5)))
         card.setValue(randint(1, 5))
-    return (fireWork.getSuit(), fireWork.getValue(), card.getSuit(), card.getValue())
+    return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
 def sigmoid(x):
@@ -149,7 +153,7 @@ def sigmoid(x):
 
 if __name__ == '__main__':
     nn = NeuralNetwork()
-    nn.train()
+    nn.trainHanabi()
     nn.compute([1, 3, 1, 4])
     print(nn.getOutput())
     nn.compute([1, 3, 2, 4])
