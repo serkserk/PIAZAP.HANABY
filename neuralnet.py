@@ -4,6 +4,7 @@ from random import random
 from random import randint
 from card import Card
 from suit import Suit
+from statistics import mean
 import math
 
 
@@ -154,11 +155,12 @@ def sigmoid(x):
 if __name__ == '__main__':
     nn = NeuralNetwork()
     nn.trainHanabi()
-    nn.compute([1, 3, 1, 4])
-    print(nn.getOutput())
-    nn.compute([1, 3, 2, 4])
-    print(nn.getOutput())
-    nn.compute([1, 3, 1, 3])
-    print(nn.getOutput())
-    nn.compute([1, 3, 2, 3])
-    print(nn.getOutput())
+    results = []
+    for i in range(50):
+        nn.compute(generateGoodInstance())
+        results.append(abs(1 - nn.getOutput()[0]))
+    for i in range(50):
+        nn.compute(generateBadInstance())
+        results.append(abs(0 - nn.getOutput()[0]))
+    print(mean(results))
+    print(results)
