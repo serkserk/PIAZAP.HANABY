@@ -60,3 +60,18 @@ class Suit(Enum):
     @classmethod
     def trueValues(cls):
         return [cls.white, cls.red, cls.blue, cls.green, cls.yellow]
+
+    @classmethod
+    def toInt(cls, suit):
+        if suit == Suit.white:
+            return 1
+        elif suit == Suit.red:
+            return 2
+        elif suit == Suit.blue:
+            return 3
+        elif suit == Suit.green:
+            return 4
+        elif suit == Suit.yellow:
+            return 5
+        else:
+            return 6

@@ -1,6 +1,9 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 from random import random
+from random import randint
+from card import Card
+from suit import Suit
 import math
 
 
@@ -102,6 +105,28 @@ class NeuralNetwork:
                     Whz = self.connexions[i][j * len(self.layers[i + 1]) + k]
                     dh = oh * (1 - oh) * Whz * self.errorSignals[i + 1][k]
                     self.errorSignals[i][j] = max(dh, self.errorSignals[i][j])
+
+
+def generateBadInstance():
+    fireWork = Card()
+    card = Card()
+    while fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1:
+        fireWork.setSuit(Suit(randint(1, 5)))
+        fireWork.setValue(randint(1, 5))
+        card.setSuit(Suit(randint(1, 5)))
+        card.setValue(randint(1, 5))
+    return (fireWork.getSuit, fireWork.getValue, card.getSuit, card.getValue)
+
+
+def generateGoodInstance():
+    fireWork = Card()
+    card = Card()
+    while not (fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1):
+        fireWork.setSuit(Suit(randint(1, 5)))
+        fireWork.setValue(randint(1, 5))
+        card.setSuit(Suit(randint(1, 5)))
+        card.setValue(randint(1, 5))
+    return (fireWork.getSuit, fireWork.getValue, card.getSuit, card.getValue)
 
 
 def sigmoid(x):
