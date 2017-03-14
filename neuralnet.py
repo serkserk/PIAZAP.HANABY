@@ -114,14 +114,11 @@ class NeuralNetwork:
     def getOutput(self):
         return self.layers[len(self.layers) - 1]
 
-    def trainHanabi(self, nIterations=10000):
-        n = nIterations
-        while n > 0:
-            self.compute(generateBadInstance())
-            self.backprop([0])
-            self.compute(generateGoodInstance())
-            self.backprop([1])
-            n -= 1
+
+def sigmoid(x):
+    """ The sigmoid function
+    """
+    return 1 / (1 + math.exp(-x))
 
 
 def generateBadInstance():
@@ -146,15 +143,19 @@ def generateGoodInstance():
     return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
-def sigmoid(x):
-    """ The sigmoid function
-    """
-    return 1 / (1 + math.exp(-x))
+def trainHanabi(net, nIterations=10000):
+        n = nIterations
+        while n > 0:
+            net.compute(generateBadInstance())
+            net.backprop([0])
+            net.compute(generateGoodInstance())
+            net.backprop([1])
+            n -= 1
 
 
 if __name__ == '__main__':
     nn = NeuralNetwork()
-    nn.trainHanabi()
+    trainHanabi(nn)
     results = []
     for i in range(50):
         nn.compute(generateGoodInstance())
