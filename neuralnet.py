@@ -144,7 +144,7 @@ def generateGoodInstance():
     return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
-def trainHanabi(net, nIterations=10000):
+def trainHanabi(net, nIterations=100):
         n = nIterations
         while n > 0:
             net.compute(generateBadInstance())
@@ -155,20 +155,22 @@ def trainHanabi(net, nIterations=10000):
 
 
 if __name__ == '__main__':
-    bestSeed = (0, 100)
-    for i in range(50):
+    bestSeed = (0, 100)  # will be used to store the best seed of the trial run
+    for i in range(50):  # trying out 50 seeds
         random.seed(None)
-        seed = random.randint(0, 65535)
-        nn = NeuralNetwork(seed=seed)
+        seed = random.randint(0, 65535)  # randomly choosing a random seed
+        nn = NeuralNetwork(seed=seed)  # creating a neural network and initializing it with the chosen seed
         trainHanabi(nn)
         errors = []
-        for i in range(50):
+        for i in range(100):
             nn.compute(generateGoodInstance())
             errors.append(abs(1 - nn.getOutput()[0]))
-        for i in range(50):
+        for i in range(100):
             nn.compute(generateBadInstance())
             errors.append(abs(0 - nn.getOutput()[0]))
         if mean(errors) < bestSeed[1]:
             bestSeed = (seed, mean(errors))
-
+    with open("GoodSeeds.txt", "a") as file:
+        file.write(str(bestSeed))
+        file.write("\n")
     print(bestSeed)
