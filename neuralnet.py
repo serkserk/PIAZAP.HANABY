@@ -15,12 +15,14 @@ class NeuralNetwork:
             - connexions
     """
 
-    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1):
+    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1, seed=None):
         """ Constructor.
             Args:
                 - neuronsPerLayer : an array containing the number of neurons for each layer
                 - the learning step, or Nu.
         """
+        random.seed(seed)
+
         self.nInputs = neuronsPerLayer[0]  # number of input neurons
         self.layers = []                   # this list contains the layers. Each layer is a list of values
         # this list contains the connexion layers. Each connexion layer is a list of values.
