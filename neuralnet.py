@@ -155,10 +155,16 @@ def trainHanabi(net, nIterations=100):
 
 
 if __name__ == '__main__':
+    import sys
     bestSeed = (0, 100)  # will be used to store the best seed of the trial run
-    for i in range(50):  # trying out 50 seeds
+
+    nIterations = 50
+    if len(sys.argv) == 2:
+        nIterations = sys.argv[1]
+
+    for i in range(nIterations):  # trying out nIterations seeds
         random.seed(None)
-        seed = random.randint(0, 65535)  # randomly choosing a random seed
+        seed = random.randint(-65536, 65535)  # randomly choosing a random seed
         nn = NeuralNetwork(seed=seed)  # creating a neural network and initializing it with the chosen seed
         trainHanabi(nn)
         errors = []
