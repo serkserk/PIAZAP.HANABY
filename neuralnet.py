@@ -1,7 +1,6 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-from random import random
-from random import randint
+import random
 from card import Card
 from suit import Suit
 from statistics import mean
@@ -39,7 +38,7 @@ class NeuralNetwork:
         for i in range(len(self.layers) - 1):  # initializing connexions with random real values [-10, 10]
             self.connexions.append([])
             for x in range(len(self.layers[i]) * len(self.layers[i + 1])):
-                self.connexions[i].append(random() * 20 - 10)
+                self.connexions[i].append(random.random() * 20 - 10)
             # the connexion from self.layers[i][j] to self.layers[i-1][k] is self.connexions[i-1][k*len(self.layers[i])+j]
             # the connexion from self.layers[i][j] to self.layers[i+1][k] is self.connexions[i][j*len(self.layers[i+1])+k]
             # the neurons corresponding to self.connexions[i][j] are self.layers[i][j/len(self.layers[i+1])] and self.layers[i+1][j%len(self.layers[i+1])]
@@ -48,7 +47,7 @@ class NeuralNetwork:
         for i in range(1, len(neuronsPerLayer)):  # initializing bias layers with random real values [-10, 10]
             self.biases.append([])
             for x in range(neuronsPerLayer[i]):
-                self.biases[i].append(random() * 20 - 10)
+                self.biases[i].append(random.random() * 20 - 10)
 
     def compute(self, input):
         """ Output value computation method.
@@ -127,10 +126,10 @@ def generateBadInstance():
     fireWork = Card()
     card = Card()
     while fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1:
-        fireWork.setSuit(Suit(randint(1, 5)))
-        fireWork.setValue(randint(1, 5))
-        card.setSuit(Suit(randint(1, 5)))
-        card.setValue(randint(1, 5))
+        fireWork.setSuit(Suit(random.randint(1, 5)))
+        fireWork.setValue(random.randint(1, 5))
+        card.setSuit(Suit(random.randint(1, 5)))
+        card.setValue(random.randint(1, 5))
     return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
@@ -138,10 +137,10 @@ def generateGoodInstance():
     fireWork = Card()
     card = Card()
     while not (fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1):
-        fireWork.setSuit(Suit(randint(1, 5)))
-        fireWork.setValue(randint(1, 5))
-        card.setSuit(Suit(randint(1, 5)))
-        card.setValue(randint(1, 5))
+        fireWork.setSuit(Suit(random.randint(1, 5)))
+        fireWork.setValue(random.randint(1, 5))
+        card.setSuit(Suit(random.randint(1, 5)))
+        card.setValue(random.randint(1, 5))
     return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
@@ -156,14 +155,20 @@ def trainHanabi(net, nIterations=10000):
 
 
 if __name__ == '__main__':
-    nn = NeuralNetwork()
-    trainHanabi(nn)
-    results = []
+    bestSeed = (0, 100)
     for i in range(50):
-        nn.compute(generateGoodInstance())
-        results.append(abs(1 - nn.getOutput()[0]))
-    for i in range(50):
-        nn.compute(generateBadInstance())
-        results.append(abs(0 - nn.getOutput()[0]))
-    print(mean(results))
-    print(results)
+        random.seed(None)
+        seed = random.randint(0, 65535)
+        nn = NeuralNetwork(seed=seed)
+        trainHanabi(nn)
+        errors = []
+        for i in range(50):
+            nn.compute(generateGoodInstance())
+            errors.append(abs(1 - nn.getOutput()[0]))
+        for i in range(50):
+            nn.compute(generateBadInstance())
+            errors.append(abs(0 - nn.getOutput()[0]))
+        if mean(errors) < bestSeed[1]:
+            bestSeed = (seed, mean(errors))
+
+    print(bestSeed)
