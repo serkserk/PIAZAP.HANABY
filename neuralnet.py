@@ -3,7 +3,6 @@
 import random
 from card import Card
 from suit import Suit
-from statistics import mean
 import math
 
 
@@ -122,7 +121,9 @@ def sigmoid(x):
     return 1 / (1 + math.exp(-x))
 
 
-def generateBadInstance():
+def generateBadCombo():
+    """ Generates two cards which can not be played on top of each other in the hanabi game
+    """
     fireWork = Card()
     card = Card()
     while fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1:
@@ -133,7 +134,9 @@ def generateBadInstance():
     return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
-def generateGoodInstance():
+def generateGoodCombo():
+    """ Generates two cards which can be played on top of each other in the hanabi game
+    """
     fireWork = Card()
     card = Card()
     while not (fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1):
@@ -144,16 +147,50 @@ def generateGoodInstance():
     return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
 
 
-def trainHanabi(net, nIterations=100):
-        n = nIterations
-        while n > 0:
-            net.compute(generateBadInstance())
-            net.backprop([0])
-            net.compute(generateGoodInstance())
-            net.backprop([1])
-            n -= 1
+def trainOnGeneratedCombos(net, nIterations=100):
+    """ Trains a network on a number of generated card combos
+        Args:
+            - net : a network to train
+            - nIterations : the number of card combos to train the network on. Defaults to 100.
+    """
+    n = nIterations
+    while n > 0:
+        net.compute(generateBadCombo())
+        net.backprop([0])
+        net.compute(generateGoodCombo())
+        net.backprop([1])
+        n -= 1
 
 
+def trainOnPlay(net, card, table):
+    fireWork = Card(suit=card.suit, value=table[card.suit])
+    net.compute((card, fireWork))
+    expectedValue = 0
+    if card.value == fireWork.value + 1:
+        expectedValue = 1
+    net.backprop([expectedValue])
+
+
+def trainOnGame(net):
+    """ Trains a network on a hanabi game played by an AI
+        Args:
+            - net : a network to train
+    """
+    import main
+    import sys
+    stdinbkp = sys.stdin
+    sys.stdin = open("trainfile.txt")
+    main.main(net)
+    sys.stdin = stdinbkp
+
+
+if __name__ == '__main__':
+    nn = NeuralNetwork()
+    trainOnGame(nn)
+
+
+
+"""
 if __name__ == '__main__':
     import sys
     bestSeed = (0, 100)  # will be used to store the best seed of the trial run
@@ -180,3 +217,4 @@ if __name__ == '__main__':
         file.write(str(bestSeed))
         file.write("\n")
     print(bestSeed)
+"""

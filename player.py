@@ -41,7 +41,9 @@ class Player(object):
         hanabi.Hanabi.table.placeDiscard(c)
         hanabi.Hanabi.table.rechargeHint()
 
-    def promptAction(self, players):
+    def promptAction(self, players, net=None):
+        """ This method prompts the player for action and carries said action out
+        """
         # validAction is a boolean that loops on
         # the menu while the action is invalid
         validAction = False
@@ -53,8 +55,12 @@ class Player(object):
             answer = input()
             if answer == "play":
                 print("which card? ", end='')
-                answerCard = input()
-                self.play(self.hand[int(answerCard)])
+                answerCardId = input()  # the index of the card answered by the player
+                answerCard = self.hand[int(answerCardId)]
+                if net is not None:
+                    from neuralnet import trainOnPlay
+                    trainOnPlay(answerCard, hanabi.Hanabi.table)
+                self.play(answerCard)
                 self.drawFrom(hanabi.Hanabi.deck)
             elif answer == "hint":
                 print("which player? ", end='')
@@ -102,7 +108,7 @@ class PlayerRandom(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, players):
+    def promptAction(self, players, net=None):
         # validAction is a boolean that loops on
         # the menu while the action is invalid
         validAction = False
@@ -115,6 +121,9 @@ class PlayerRandom(Player):
             if randAction == 0:
                 print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
                 randCard = randint(0, self.handCapacity - 1)
+                if net is not None:
+                    from neuralnet import trainOnPlay
+                    trainOnPlay(self.hand[randCard], hanabi.Hanabi.table)
                 self.play(self.hand[randCard])
                 self.drawFrom(hanabi.Hanabi.deck)
             elif randAction == 1:
@@ -130,12 +139,15 @@ class PlayerRandomPlus(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, players):
+    def promptAction(self, players, net=None):
         nbcard = 0  # index of current card
         print("--------------")
         print("Trying to play... ")
         for card in self.hand:
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
+                if net is not None:
+                    from neuralnet import trainOnPlay
+                    trainOnPlay(self.hand[nbcard], hanabi.Hanabi.table)
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
@@ -152,12 +164,15 @@ class PlayerRandomPlusPlus(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, players):
+    def promptAction(self, players, net=None):
         nbcard = 0  # index of current card
         print("--------------")
         print("Trying to play... ")
         for card in self.hand:
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
+                if net is not None:
+                    from neuralnet import trainOnPlay
+                    trainOnPlay(self.hand[nbcard], hanabi.Hanabi.table)
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)

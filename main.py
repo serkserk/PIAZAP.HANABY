@@ -8,8 +8,10 @@ import os
 from statistics import median, mean, stdev
 
 
-def main():
+def main(net=None):
     """ main function. contains the game loop.
+        Args :
+            - net : a neural network to train on the game that is about to be played (optional)
     """
     colorama.init()
     print(Bcolor.CLEAR)    # clear the screen
@@ -37,7 +39,7 @@ def main():
         while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
             currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
             Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
-            currentPlayer.promptAction(Hanabi.players)
+            currentPlayer.promptAction(Hanabi.players, net)
             turn += 1
             print("Score after play: ", Hanabi.table.getScore())
             print()
