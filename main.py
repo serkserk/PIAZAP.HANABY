@@ -5,7 +5,7 @@ from bcolor import Bcolor
 import colorama
 import sys
 import os
-from statistics import median, mean, stdev
+from statistics import median, mean, stdev, StatisticsError
 
 
 def main(net=None):
@@ -55,7 +55,10 @@ def main(net=None):
     print(Bcolor.BOLD + colorama.Fore.CYAN + "Scores from ", nbIte, " iterations: ", scoreArray, Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "mean: ", mean(scoreArray), Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "median:", median(scoreArray), Bcolor.END)
-    print(Bcolor.BOLD + colorama.Fore.CYAN + "standard deviation:", stdev(scoreArray), Bcolor.END)
+    try:
+        print(Bcolor.BOLD + colorama.Fore.CYAN + "standard deviation:", stdev(scoreArray), Bcolor.END)
+    except StatisticsError as e:
+        print(Bcolor.BOLD + colorama.Fore.CYAN + "standard deviation: N/A", Bcolor.END)
 
 
 # Disable

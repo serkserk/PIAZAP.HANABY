@@ -163,8 +163,8 @@ def trainOnGeneratedCombos(net, nIterations=100):
 
 
 def trainOnPlay(net, card, table):
-    fireWork = Card(suit=card.suit, value=table[card.suit])
-    net.compute((card, fireWork))
+    fireWork = Card(suit=card.suit, value=table.field[card.suit])
+    net.compute((Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue()))
     expectedValue = 0
     if card.value == fireWork.value + 1:
         expectedValue = 1
@@ -187,7 +187,6 @@ def trainOnGame(net):
 if __name__ == '__main__':
     nn = NeuralNetwork()
     trainOnGame(nn)
-
 
 
 """

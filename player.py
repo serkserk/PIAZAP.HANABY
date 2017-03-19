@@ -172,7 +172,7 @@ class PlayerRandomPlusPlus(Player):
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
                 if net is not None:
                     from neuralnet import trainOnPlay
-                    trainOnPlay(self.hand[nbcard], hanabi.Hanabi.table)
+                    trainOnPlay(net, self.hand[nbcard], hanabi.Hanabi.table)
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
