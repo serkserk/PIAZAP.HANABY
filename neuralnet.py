@@ -185,8 +185,22 @@ def trainOnGame(net):
 
 
 if __name__ == '__main__':
+    from statistics import mean
     nn = NeuralNetwork()
-    trainOnGame(nn)
+    nIterations = 0
+    error = 100
+    while error > 0.001 and nIterations < 100:
+        trainOnGame(nn)
+        errors = []
+        for i in range(100):
+            nn.compute(generateGoodCombo())
+            errors.append(abs(1 - nn.getOutput()[0]))
+        for i in range(100):
+            nn.compute(generateBadCombo())
+            errors.append(abs(0 - nn.getOutput()[0]))
+            error = mean(errors)
+        nIterations += 1
+    print(error)
 
 
 """
