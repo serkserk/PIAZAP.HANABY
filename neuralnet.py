@@ -185,16 +185,24 @@ def trainOnGame(net):
 
 if __name__ == '__main__':
     from statistics import mean
-    nn = NeuralNetwork()
+    import sys
 
-    random.seed(None)
-    random.seed(random.randint(-65536, 65535))
-    nn = NeuralNetwork()  # creating a neural network and initializing it with the chosen seed
+    maxIterations = 10
+    if len(sys.argv) == 2:
+        maxIterations = int(sys.argv[1])
 
-    nIterations = 0
-    error = 100
-    while error > 0.001 and nIterations < 100:
+    seed = 0
+    error = 1
+    bestSeed = (seed, error)
+    while maxIterations > 0 and error > 0.1:
+        random.seed(None)
+        seed = random.randint(-65536, 65535)
+        random.seed(seed)
+        nn = NeuralNetwork()  # creating a neural network and initializing it with the chosen seed
+
         trainOnGame(nn)
+
+        # testing
         errors = []
         for i in range(100):
             nn.compute(generateGoodCombo())
@@ -202,9 +210,15 @@ if __name__ == '__main__':
         for i in range(100):
             nn.compute(generateBadCombo())
             errors.append(abs(0 - nn.getOutput()[0]))
-            error = mean(errors)
-        nIterations += 1
-    print(error)
+        error = mean(errors)
+
+        if error < bestSeed[1]:
+            bestSeed = (seed, error)
+
+    with open("GoodSeeds.txt", "a") as file:
+        file.write(str(bestSeed))
+        file.write("\n")
+    print(bestSeed)
 
 
 """
