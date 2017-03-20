@@ -59,7 +59,7 @@ class Player(object):
                 answerCard = self.hand[int(answerCardId)]
                 if net is not None:
                     from neuralnet import trainOnPlay
-                    trainOnPlay(answerCard, hanabi.Hanabi.table)
+                    trainOnPlay(net, answerCard, hanabi.Hanabi.table)
                 self.play(answerCard)
                 self.drawFrom(hanabi.Hanabi.deck)
             elif answer == "hint":
@@ -123,7 +123,7 @@ class PlayerRandom(Player):
                 randCard = randint(0, self.handCapacity - 1)
                 if net is not None:
                     from neuralnet import trainOnPlay
-                    trainOnPlay(self.hand[randCard], hanabi.Hanabi.table)
+                    trainOnPlay(net, self.hand[randCard], hanabi.Hanabi.table)
                 self.play(self.hand[randCard])
                 self.drawFrom(hanabi.Hanabi.deck)
             elif randAction == 1:
@@ -147,7 +147,7 @@ class PlayerRandomPlus(Player):
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
                 if net is not None:
                     from neuralnet import trainOnPlay
-                    trainOnPlay(self.hand[nbcard], hanabi.Hanabi.table)
+                    trainOnPlay(net, self.hand[nbcard], hanabi.Hanabi.table)
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
