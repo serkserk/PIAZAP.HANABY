@@ -13,13 +13,12 @@ class NeuralNetwork:
             - connexions
     """
 
-    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1, seed=None):
+    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1):
         """ Constructor.
             Args:
                 - neuronsPerLayer : an array containing the number of neurons for each layer
                 - the learning step, or Nu.
         """
-        random.seed(seed)
 
         self.nInputs = neuronsPerLayer[0]  # number of input neurons
         self.layers = []                   # this list contains the layers. Each layer is a list of values
@@ -187,6 +186,11 @@ def trainOnGame(net):
 if __name__ == '__main__':
     from statistics import mean
     nn = NeuralNetwork()
+
+    random.seed(None)
+    random.seed(random.randint(-65536, 65535))
+    nn = NeuralNetwork()  # creating a neural network and initializing it with the chosen seed
+
     nIterations = 0
     error = 100
     while error > 0.001 and nIterations < 100:
