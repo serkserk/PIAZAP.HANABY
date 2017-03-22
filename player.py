@@ -2,16 +2,17 @@
 #-*- coding: utf-8 -*-
 from card import *
 import hanabi
-from random import randint
+from random import randint, seed
 from bcolor import *
 import colorama
 
 
 class Player(object):
-    def __init__(self, handSize):
+    def __init__(self, handSize, seed=None):
         self.handCapacity = handSize
         self.hand = []
         self.knownHand = []
+        self._seed = None
 
     def drawFrom(self, deck):
         missingCards = self.handCapacity - len(self.hand)
@@ -112,6 +113,7 @@ class PlayerRandom(Player):
         # validAction is a boolean that loops on
         # the menu while the action is invalid
         validAction = False
+        seed(self._seed)
         randAction = randint(0, 1)
 
         while not validAction:
@@ -154,6 +156,7 @@ class PlayerRandomPlus(Player):
                 return  # finish if played a  card
             print(colorama.Fore.CYAN + "Could not play card: " + str(nbcard + 1) + Bcolor.END)
             nbcard += 1
+        seed(self._seed)
         randDiscard = randint(0, self.handCapacity - 1)
         print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding random card: " + str(randDiscard + 1) + Bcolor.END)
         self.discard(self.hand[randDiscard])
@@ -161,8 +164,8 @@ class PlayerRandomPlus(Player):
 
 
 class PlayerRandomPlusPlus(Player):
-    def __init__(self, handSize):
-        Player.__init__(self, handSize)
+    def __init__(self, handSize, seed=None):
+        Player.__init__(self, handSize, seed)
 
     def promptAction(self, players, net=None):
         nbcard = 0  # index of current card
@@ -189,6 +192,7 @@ class PlayerRandomPlusPlus(Player):
             print(colorama.Fore.LIGHTMAGENTA_EX + "Could not discard card: " + str(nbcard + 1) + Bcolor.END)
             nbcard += 1
         else:  # discard a random card if cant find a discardable card
+            seed(self._seed)
             randDiscard = randint(0, self.handCapacity - 1)
             print(colorama.Fore.LIGHTMAGENTA_EX + "Could not find discardable card, random card: " + str(randDiscard) + Bcolor.END)
             self.discard(self.hand[randDiscard])

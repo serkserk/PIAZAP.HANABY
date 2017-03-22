@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-from random import *
+import random
 from suit import *
 from card import *
 
@@ -8,8 +8,9 @@ from card import *
 class Deck:
     N_SHUFFLES = 100
 
-    def __init__(self):
+    def __init__(self, seed=None):
         self.deck = []
+        self._seed = seed
         suits = [Suit.white, Suit.red, Suit.blue, Suit.green, Suit.yellow]
 
         # creating the deck with 3 ones, 2 2s, 3s & 4s and 1 5 for each suit
@@ -22,9 +23,8 @@ class Deck:
             self.deck.append(Card(s, 5))
 
     def shuffle(self):
-        # seed = randint(0, 10)
-        # Random(2).shuffle(self.deck)
-        shuffle(self.deck)
+        random.seed(self._seed)
+        random.shuffle(self.deck)
 
     def draw(self):
         if not self.empty():
