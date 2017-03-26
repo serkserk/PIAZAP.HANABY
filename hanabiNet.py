@@ -114,7 +114,9 @@ def mixAndMatchSeeds():
     with open('GoodSeeds.txt') as file:
         for line in file.readlines():
             line = line.strip('\n')
-            seedTuples.append(eval(line)[:3])  # appending the tuple of seeds to the list without the error field
+            nextTuple = eval(line)
+            if nextTuple[3] < 0.1:
+                seedTuples.append(nextTuple[:3])  # appending the tuple of seeds to the list without the error field
     confusionTable = {}
     for i in range(seedTuples):
         for j in range(seedTuples):
@@ -130,6 +132,6 @@ def mixAndMatchSeeds():
 
 
 if __name__ == '__main__':
-    for i in range(50):
+    for i in range(25):
         findSeeds()
     mixAndMatchSeeds()
