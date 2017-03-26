@@ -118,9 +118,9 @@ def mixAndMatchSeeds():
             if nextTuple[3] < 0.1:
                 seedTuples.append(nextTuple[:3])  # appending the tuple of seeds to the list without the error field
     confusionTable = {}
-    for i in range(seedTuples):
-        for j in range(seedTuples):
-            for k in range(seedTuples):
+    for i in range(len(seedTuples)):
+        for j in range(len(seedTuples)):
+            for k in range(len(seedTuples)):
                 nn = NeuralNetwork(weightInitSeed=seedTuples[i][0])
                 trainOnGame(nn, seed=seedTuples[j][1])
                 confusionTable[i, j] = (seedTuples[i][0], seedTuples[j][1], seedTuples[k][2], test(nn, seedTuples[k][2]))
@@ -132,6 +132,4 @@ def mixAndMatchSeeds():
 
 
 if __name__ == '__main__':
-    for i in range(25):
-        findSeeds()
     mixAndMatchSeeds()
