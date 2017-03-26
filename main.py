@@ -8,7 +8,7 @@ import os
 from statistics import median, mean, stdev, StatisticsError
 
 
-def main(net=None):
+def main(net=None, seed=None):
     """ main function. contains the game loop.
         Args :
             - net : a neural network to train on the game that is about to be played (optional)
@@ -32,19 +32,22 @@ def main(net=None):
     if printing == 0:
         blockPrint()
     while not iteration == 0:
-        Hanabi.initPlayers(nbPlayer, nbHand, playerTypeArray)
+        Hanabi.initPlayers(nbPlayer, nbHand, playerTypeArray, seed)
         print()
         print()
         turn = 0
+        if seed is not None:  # This condition isn't vital, but it saves time if the seed isn't specified
+            Hanabi.deck.sort()  # we may want the deck to be shuffled with a specific seed. Since the deck
+            Hanabi.deck.shuffle(seed)  # is already shuffled when the Hanabi class is loaded, we need to sort it first.
         while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
             currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
             Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
             currentPlayer.promptAction(Hanabi.players, net)
             turn += 1
-            print("Score after play: ", Hanabi.table.getScore())
+            print("Current score: ", Hanabi.table.getScore())
             print()
 
-        print(Bcolor.BOLD + colorama.Fore.CYAN + "Final score: ", Hanabi.table.getScore(), " in ", turn, " turn !" + Bcolor.END)
+        print(Bcolor.BOLD + colorama.Fore.CYAN + "Final score: ", Hanabi.table.getScore(), " in ", turn, " turns !" + Bcolor.END)
         print()
         scoreArray.append(Hanabi.table.getScore())
         iteration -= 1

@@ -16,12 +16,12 @@ class Hanabi:
         players (List<Player>) : the list of players
     """
     deck = Deck()
-    deck.shuffle()
+    deck.shuffle()  # deck is shuffled here for code portability. Should be sorted if re-shuffled with a seed.
     table = Table()
     players = []
 
     @classmethod
-    def initPlayers(cls, nbPlayer, nbHand, playerTypeArray):
+    def initPlayers(cls, nbPlayer, nbHand, playerTypeArray, seed=None):
         Hanabi.newGame()
         playersNumber = nbPlayer
         handSize = nbHand
@@ -29,13 +29,13 @@ class Hanabi:
         for i in range(playersNumber):
             playerType = playersType[i]
             if playerType == 1:
-                cls.players.append(Player(handSize))
+                cls.players.append(Player(handSize, seed))
             elif playerType == 2:
-                cls.players.append(PlayerRandom(handSize))
+                cls.players.append(PlayerRandom(handSize, seed))
             elif playerType == 3:
-                cls.players.append(PlayerRandomPlus(handSize))
+                cls.players.append(PlayerRandomPlus(handSize, seed))
             elif playerType == 4:
-                cls.players.append(PlayerRandomPlusPlus(handSize))
+                cls.players.append(PlayerRandomPlusPlus(handSize, seed))
             cls.players[i].drawFrom(cls.deck)
 
     @classmethod

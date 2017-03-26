@@ -22,9 +22,16 @@ class Deck:
                     self.deck.append(Card(s, i))
             self.deck.append(Card(s, 5))
 
-    def shuffle(self):
-        random.seed(self._seed)
+    def shuffle(self, seed=None):
+        if seed is None:
+            # I would love for self._seed to be the default value of seed,
+            # calling self in a default value isn't syntactically correct in Python
+            seed = self._seed
+        random.seed(seed)
         random.shuffle(self.deck)
+
+    def sort(self):
+        self.deck.sort()
 
     def draw(self):
         if not self.empty():

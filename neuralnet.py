@@ -172,7 +172,7 @@ def trainOnPlay(net, card, table):
     net.backprop([expectedValue])
 
 
-def trainOnGame(net):
+def trainOnGame(net, seed=None):
     """ Trains a network on a hanabi game played by an AI
         Args:
             - net : a network to train
@@ -181,7 +181,7 @@ def trainOnGame(net):
     import sys
     stdinbkp = sys.stdin
     sys.stdin = open("trainfile.txt")
-    main.main(net)
+    main.main(net, seed)
     sys.stdin = stdinbkp
 
 
@@ -195,27 +195,29 @@ if __name__ == '__main__':
 
     seed = 0
     error = 1
-    bestSeed = (seed, error)
+    bestSeed = (seed, seed, seed, error)
     while maxIterations > 0 and error > 0.1:
-        random.seed(None)
-        seed = random.randint(-65536, 65535)
-        random.seed(seed)
-        nn = NeuralNetwork()  # creating a neural network and initializing it with the chosen seed
+        maxIterations -= 1
+        random.seed(None)  # reset random number generator
+        weightSeed = random.randint(-65536, 65535)  # create a random seed
+        learnSeed = random.randint(-65536, 65535)  # create a random seed
+        testSeed = random.randint(-65536, 65535)  # create a random seed
+        nn = NeuralNetwork(weightInitSeed=weightSeed)  # creating a neural network and initializing it with the chosen seed
 
-        trainOnGame(nn)
+        trainOnGame(nn, learnSeed)
 
         # testing
         errors = []
         for i in range(100):
-            nn.compute(generateGoodCombo())
+            nn.compute(generateGoodCombo(testSeed))
             errors.append(abs(1 - nn.getOutput()[0]))
         for i in range(100):
-            nn.compute(generateBadCombo())
+            nn.compute(generateBadCombo(testSeed))
             errors.append(abs(0 - nn.getOutput()[0]))
         error = mean(errors)
 
-        if error < bestSeed[1]:
-            bestSeed = (seed, error)
+        if error < bestSeed[3]:
+            bestSeed = (weightSeed, learnSeed, testSeed, error)
 
     with open("GoodSeeds.txt", "a") as file:
         file.write(str(bestSeed))

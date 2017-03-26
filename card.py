@@ -23,3 +23,44 @@ class Card:
 
     def toString(self):
         return Suit.toColor(self.suit) + " " + Suit.toString(self.suit) + " " + str(self.value) + Bcolor.END
+
+    def __int__(self):
+        """ overload of int() for easy value comparisons
+            1 <= Suit.toInt(self.suit) <= 6
+            0 <= (Suit.toInt(self.suit) - 1) <= 5
+            0 <= (Suit.toInt(self.suit) - 1) * 5 <= 25
+            1 <= (Suit.toInt(self.suit) - 1) * 5 + self.value <= 30
+            this stretches our nColors*nValues = 6*5 = 30 different types
+            of cards over 30 different values, which allows us to order them
+        """
+        return (Suit.toInt(self.suit) - 1) * 5 + self.value
+
+    def __lt__(self, other):
+        """ Overload of the < operator for sorting
+        """
+        return int(self) < int(other)
+
+    def __le__(self, other):
+        """ Overload of the <= operator
+        """
+        return int(self) <= int(other)
+
+    def __gt__(self, other):
+        """ Overload of the > operator
+        """
+        return int(self) > int(other)
+
+    def __ge__(self, other):
+        """ Overload of the >= operator
+        """
+        return int(self) >= int(other)
+
+    def __eq__(self, other):
+        """ Overload of the == operator
+        """
+        return int(self) == int(other)
+
+    def __ne__(self, other):
+        """ Overload of the != operator
+        """
+        return int(self) != int(other)

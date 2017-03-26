@@ -12,7 +12,7 @@ class Player(object):
         self.handCapacity = handSize
         self.hand = []
         self.knownHand = []
-        self._seed = None
+        self._seed = seed
 
     def drawFrom(self, deck):
         missingCards = self.handCapacity - len(self.hand)
@@ -106,8 +106,8 @@ class Player(object):
 
 
 class PlayerRandom(Player):
-    def __init__(self, handSize):
-        Player.__init__(self, handSize)
+    def __init__(self, handSize, seed=None):
+        Player.__init__(self, handSize, seed)
 
     def promptAction(self, players, net=None):
         # validAction is a boolean that loops on
@@ -138,8 +138,8 @@ class PlayerRandom(Player):
 
 
 class PlayerRandomPlus(Player):
-    def __init__(self, handSize):
-        Player.__init__(self, handSize)
+    def __init__(self, handSize, seed=None):
+        Player.__init__(self, handSize, seed)
 
     def promptAction(self, players, net=None):
         nbcard = 0  # index of current card
