@@ -115,20 +115,18 @@ def mixAndMatchSeeds():
         for line in file.readlines():
             line = line.strip('\n')
             nextTuple = eval(line)
-            if nextTuple[3] < 0.1:
+            if nextTuple[3] < 0.001:
                 seedTuples.append(nextTuple[:3])  # appending the tuple of seeds to the list without the error field
     confusionTable = {}
     for i in range(len(seedTuples)):
         for j in range(len(seedTuples)):
-            for k in range(len(seedTuples)):
-                nn = NeuralNetwork(weightInitSeed=seedTuples[i][0])
-                trainOnGame(nn, seed=seedTuples[j][1])
-                confusionTable[i, j] = (seedTuples[i][0], seedTuples[j][1], seedTuples[k][2], test(nn, seedTuples[k][2]))
+            nn = NeuralNetwork(weightInitSeed=seedTuples[i][0])
+            trainOnGame(nn, seed=seedTuples[j][1])
+            confusionTable[seedTuples[i][0], seedTuples[j][1]] = test(nn, 38826)  # 38826 is a good test seed
 
-    with open("GoodSeeds.txt", "a") as file:
-        file.write("\n")
-        file.write(str(confusionTable))
-        file.write("\n")
+            with open("SeedConfusionTable.txt", "w") as file:
+                file.write(str(confusionTable))
+                file.write("\n")
 
 
 if __name__ == '__main__':
