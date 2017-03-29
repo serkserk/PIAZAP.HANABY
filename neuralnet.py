@@ -11,13 +11,12 @@ class NeuralNetwork:
             - connexions
     """
 
-    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1, weightInitSeed=None):
+    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1):
         """ Constructor.
             Args:
                 - neuronsPerLayer : an array containing the number of neurons for each layer
                 - the learning step, or Nu.
         """
-        random.seed(weightInitSeed)
         self.nInputs = neuronsPerLayer[0]  # number of input neurons
         self.layers = []                   # this list contains the layers. Each layer is a list of values
         # this list contains the connexion layers. Each connexion layer is a list of values.
@@ -110,6 +109,9 @@ class NeuralNetwork:
 
     def getOutput(self):
         return self.layers[len(self.layers) - 1]
+
+    def train(self, player, table):
+        pass
 
 
 def sigmoid(x):

@@ -8,9 +8,8 @@ from card import *
 class Deck:
     N_SHUFFLES = 100
 
-    def __init__(self, seed=None):
+    def __init__(self):
         self.deck = []
-        self._seed = seed
         suits = [Suit.white, Suit.red, Suit.blue, Suit.green, Suit.yellow]
 
         # creating the deck with 3 ones, 2 2s, 3s & 4s and 1 5 for each suit
@@ -22,12 +21,7 @@ class Deck:
                     self.deck.append(Card(s, i))
             self.deck.append(Card(s, 5))
 
-    def shuffle(self, seed=None):
-        if seed is None:
-            # I would love for self._seed to be the default value of seed,
-            # calling self in a default value isn't syntactically correct in Python
-            seed = self._seed
-        random.seed(seed)
+    def shuffle(self):
         random.shuffle(self.deck)
 
     def sort(self):

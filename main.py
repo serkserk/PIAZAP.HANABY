@@ -8,7 +8,7 @@ import os
 from statistics import median, mean, stdev, StatisticsError
 
 
-def main(net=None, seed=None):
+def main(net=None):
     """ main function. contains the game loop.
         Args :
             - net : a neural network to train on the game that is about to be played (optional)
@@ -32,13 +32,12 @@ def main(net=None, seed=None):
     if printing == 0:
         blockPrint()
     while not iteration == 0:
-        Hanabi.initPlayers(nbPlayer, nbHand, playerTypeArray, seed)
+        Hanabi.initPlayers(nbPlayer, nbHand, playerTypeArray)
         print()
         print()
         turn = 0
-        if seed is not None:  # This condition isn't vital, but it saves time if the seed isn't specified
-            Hanabi.deck.sort()  # we may want the deck to be shuffled with a specific seed. Since the deck
-            Hanabi.deck.shuffle(seed)  # is already shuffled when the Hanabi class is loaded, we need to sort it first.
+        Hanabi.deck.sort()  # we may want the deck to be shuffled with a specific seed. Since the deck
+        Hanabi.deck.shuffle()  # is already shuffled when the Hanabi class is loaded, we need to sort it first.
         while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
             currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
             Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
