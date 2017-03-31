@@ -81,30 +81,33 @@ def test(net, iterations=10000, seed=None):
 
 if __name__ == '__main__':
     import main
-    import sys
 
-    main.blockPrint()
+    for i in range(10):
+        main.blockPrint()
 
-    weightSeed = "placeholder"
-    random.seed(weightSeed)
-    nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
-    nn.train = train
+        weightSeed = random.randint(-65536, 65535)
+        random.seed(weightSeed)
+        nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
+        nn.train = train
 
-    stdinbkp = sys.stdin
+        trainSeed = random.randint(-65536, 65535)
+        random.seed(trainSeed)
+        iterations = 16  # base d'apprentissage ~ 10 000 exemples
+        try:
+            for i in range(iterations):
+                main.main(nn, "trainfile.txt")
+        except Exception as e:
+            main.enablePrint()
+            raise e
 
-    trainSeed = "placeholder"
-    random.seed(trainSeed)
-    iterations = 16  # base d'apprentissage ~ 10 000 exemples
-    for i in range(iterations):
+        random.seed(trainSeed)
+        nn.train = testOnGame
+        nn.learnError = []
         main.main(nn, "trainfile.txt")
+        main.enablePrint()
+        print("learn Error :", sum(nn.learnError) / len(nn.learnError))
 
-    random.seed(trainSeed)
-    nn.train = testOnGame
-    nn.learnError = []
-    main.main(nn, "trainfile.txt")
-    main.enablePrint()
-    print("learn Error :", sum(nn.learnError) / len(nn.learnError))
+        testError = test(nn)
+        print("Test Error :", testError)
 
-    testError = test(nn)
-
-    sys.stdin = stdinbkp
+        print(weightSeed, " ", trainSeed)

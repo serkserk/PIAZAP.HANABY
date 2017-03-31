@@ -13,7 +13,7 @@ def main(net=None, inputFile=None):
             - net : a neural network to train on the game that is about to be played (optional)
     """
     colorama.init()
-    print(Bcolor.CLEAR)    # clear the screen
+    #print(Bcolor.CLEAR)    # clear the screen
     if inputFile is not None:
         inputFile = open(inputFile)
         sys.stdin = inputFile
