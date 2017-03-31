@@ -58,8 +58,7 @@ class Player(object):
                 answerCardId = input()  # the index of the card answered by the player
                 answerCard = self.hand[int(answerCardId)]
                 if net is not None:
-                    from hanabiNet import trainOnPlay
-                    trainOnPlay(net, answerCard, hanabi.Hanabi.table)
+                    net.train(self, hanabi.Hanabi.table)
                 self.play(answerCard)
                 self.drawFrom(hanabi.Hanabi.deck)
             elif answer == "hint":
@@ -122,8 +121,7 @@ class PlayerRandom(Player):
                 print(colorama.Fore.CYAN + "Playing..." + Bcolor.END)
                 randCard = randint(0, self.handCapacity - 1)
                 if net is not None:
-                    from hanabiNet import trainOnPlay
-                    trainOnPlay(net, self.hand[randCard], hanabi.Hanabi.table)
+                    net.train(self, hanabi.Hanabi.table)
                 self.play(self.hand[randCard])
                 self.drawFrom(hanabi.Hanabi.deck)
             elif randAction == 1:
@@ -146,8 +144,7 @@ class PlayerRandomPlus(Player):
         for card in self.hand:
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
                 if net is not None:
-                    from hanabiNet import trainOnPlay
-                    trainOnPlay(net, self.hand[nbcard], hanabi.Hanabi.table)
+                    net.train(self, hanabi.Hanabi.table)
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
@@ -171,8 +168,7 @@ class PlayerRandomPlusPlus(Player):
         for card in self.hand:
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
                 if net is not None:
-                    from hanabiNet import trainOnPlay
-                    trainOnPlay(net, self.hand[nbcard], hanabi.Hanabi.table)
+                    net.train(net, self, hanabi.Hanabi.table)
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)

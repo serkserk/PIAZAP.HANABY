@@ -7,12 +7,13 @@ from neuralnet import NeuralNetwork
 
 
 def train(self, player, table):
-    inputs = []
     for card in player.hand:
+        inputs = []
         for suit, value in table.field.items():
             inputs.append(value)
         inputs.append(Suit.toInt(card.getSuit()))
         inputs.append(card.getValue())
+        print(inputs)
         self.compute(inputs)
         expectedValue = 0
         if table.cardPlayable(card):
@@ -83,24 +84,27 @@ if __name__ == '__main__':
     import main
     import sys
 
+    main.blockPrint()
+
     weightSeed = "placeholder"
     random.seed(weightSeed)
     nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
     nn.train = train
 
     stdinbkp = sys.stdin
-    sys.stdin = open("trainfile.txt")
 
     trainSeed = "placeholder"
     random.seed(trainSeed)
     iterations = 16  # base d'apprentissage ~ 10 000 exemples
     for i in range(iterations):
+        sys.stdin = open("trainfile.txt")
         main.main(nn)
 
     random.seed(trainSeed)
     nn.train = testOnGame
     main.main(nn)
     nn.learnError = []
+    main.enablePrint()
     print("learn Error :", nn.learnError)
     testError = test(nn)
 

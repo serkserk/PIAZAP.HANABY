@@ -16,8 +16,8 @@ def main(net=None):
     colorama.init()
     print(Bcolor.CLEAR)    # clear the screen
 
-    print(colorama.Fore.LIGHTBLUE_EX + "Enable printing? (no: 0, yes: 1) " + Bcolor.END, end='')
-    printing = int(input())
+#    print(colorama.Fore.LIGHTBLUE_EX + "Enable printing? (no: 0, yes: 1) " + Bcolor.END, end='')
+#    printing = int(input())
     print(colorama.Fore.LIGHTBLUE_EX + "How many iteration? " + Bcolor.END, end='')
     iteration = int(input())
     nbIte = iteration
@@ -29,8 +29,8 @@ def main(net=None):
         playerTypeArray.append(Hanabi.promptPlayerType())
     scoreArray = []
 
-    if printing == 0:
-        blockPrint()
+#    if printing == 0:
+#        blockPrint()
     while not iteration == 0:
         Hanabi.initPlayers(nbPlayer, nbHand, playerTypeArray)
         print()
@@ -51,9 +51,8 @@ def main(net=None):
         scoreArray.append(Hanabi.table.getScore())
         iteration -= 1
 
-    if printing == 0:
-        enablePrint()
-        colorama.init()
+#    if printing == 0:
+#        enablePrint()
     print(Bcolor.BOLD + colorama.Fore.CYAN + "Scores from ", nbIte, " iterations: ", scoreArray, Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "mean: ", mean(scoreArray), Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "median:", median(scoreArray), Bcolor.END)
@@ -71,6 +70,7 @@ def blockPrint():
 # Restore
 def enablePrint():
     sys.stdout = sys.__stdout__
+    colorama.init()
 
 
 if __name__ == '__main__':
