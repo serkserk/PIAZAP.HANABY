@@ -13,7 +13,6 @@ def train(self, player, table):
             inputs.append(value)
         inputs.append(Suit.toInt(card.getSuit()))
         inputs.append(card.getValue())
-        print(inputs)
         self.compute(inputs)
         expectedValue = 0
         if table.cardPlayable(card):
@@ -22,8 +21,8 @@ def train(self, player, table):
 
 
 def testOnGame(self, player, table):
-    inputs = []
     for card in player.hand:
+        inputs = []
         for suit, value in table.field.items():
             inputs.append(value)
         inputs.append(Suit.toInt(card.getSuit()))
@@ -101,10 +100,11 @@ if __name__ == '__main__':
 
     random.seed(trainSeed)
     nn.train = testOnGame
-    main.main(nn)
     nn.learnError = []
+    main.main(nn, "trainfile.txt")
     main.enablePrint()
-    print("learn Error :", nn.learnError)
+    print("learn Error :", sum(nn.learnError) / len(nn.learnError))
+
     testError = test(nn)
 
     sys.stdin = stdinbkp
