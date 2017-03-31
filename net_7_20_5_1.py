@@ -97,8 +97,7 @@ if __name__ == '__main__':
     random.seed(trainSeed)
     iterations = 16  # base d'apprentissage ~ 10 000 exemples
     for i in range(iterations):
-        sys.stdin = open("trainfile.txt")
-        main.main(nn)
+        main.main(nn, "trainfile.txt")
 
     random.seed(trainSeed)
     nn.train = testOnGame

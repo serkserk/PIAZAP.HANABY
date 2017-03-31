@@ -8,16 +8,16 @@ import os
 from statistics import median, mean, stdev, StatisticsError
 
 
-def main(net=None):
+def main(net=None, inputFile=None):
     """ main function. contains the game loop.
         Args :
             - net : a neural network to train on the game that is about to be played (optional)
     """
     colorama.init()
     print(Bcolor.CLEAR)    # clear the screen
+    if inputFile is not None:
+        sys.stdin = open(inputFile)
 
-#    print(colorama.Fore.LIGHTBLUE_EX + "Enable printing? (no: 0, yes: 1) " + Bcolor.END, end='')
-#    printing = int(input())
     print(colorama.Fore.LIGHTBLUE_EX + "How many iteration? " + Bcolor.END, end='')
     iteration = int(input())
     nbIte = iteration
@@ -51,8 +51,10 @@ def main(net=None):
         scoreArray.append(Hanabi.table.getScore())
         iteration -= 1
 
-#    if printing == 0:
-#        enablePrint()
+    if inputFile is not None:
+        sys.stdin.close()
+        sys.stdin = sys.__stdin__
+
     print(Bcolor.BOLD + colorama.Fore.CYAN + "Scores from ", nbIte, " iterations: ", scoreArray, Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "mean: ", mean(scoreArray), Bcolor.END)
     print(Bcolor.BOLD + colorama.Fore.CYAN + "median:", median(scoreArray), Bcolor.END)
