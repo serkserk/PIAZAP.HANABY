@@ -3,6 +3,7 @@
 
 from enum import Enum
 import colorama
+import random
 
 
 class Suit(Enum):
@@ -12,6 +13,21 @@ class Suit(Enum):
     green = 4
     yellow = 5
     unknown = 6
+
+    def randomColor():
+        col = random.randint(1, 5)
+        if col == 1:
+            return "white"
+        elif col == 2:
+            return "red"
+        elif col == 3:
+            return "blue"
+        elif col == 4:
+            return "green"
+        elif col == 5:
+            return "yellow"
+        else:
+            return "unknown"
 
     def toColor(suit):
         if suit == Suit.white:
@@ -63,15 +79,15 @@ class Suit(Enum):
 
     @classmethod
     def toInt(cls, suit):
-        if suit == Suit.white:
+        if suit == Suit.white or suit == "white":
             return 1
-        elif suit == Suit.red:
+        elif suit == Suit.red or suit == "red":
             return 2
-        elif suit == Suit.blue:
+        elif suit == Suit.blue or suit == "blue":
             return 3
-        elif suit == Suit.green:
+        elif suit == Suit.green or suit == "green":
             return 4
-        elif suit == Suit.yellow:
+        elif suit == Suit.yellow or suit == "yellow":
             return 5
         else:
             return 6
