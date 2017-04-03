@@ -6,20 +6,6 @@ from suit import Suit
 from neuralnet import NeuralNetwork
 
 
-def train(self, player, table):
-    for card in player.hand:
-        inputs = []
-        for suit, value in table.field.items():
-            inputs.append(value)
-        inputs.append(Suit.toInt(card.getSuit()))
-        inputs.append(card.getValue())
-        self.compute(inputs)
-        expectedValue = 0
-        if table.cardPlayable(card):
-            expectedValue = 1
-        self.backprop([expectedValue])
-
-
 def testOnGame(self, player, table):
     for card in player.hand:
         inputs = []
