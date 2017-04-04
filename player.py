@@ -161,7 +161,7 @@ class PlayerRandomPlusPlus(Player):
         print("Trying to play... ")
         for card in self.hand:
             if knowledgeBase is not None:
-                    example = [fireWork for fireWork in hanabi.Hanabi.table.field]
+                    example = list(hanabi.Hanabi.table.field)
                     example.append(Suit.toInt(self.hand[nbcard].getSuit()))
                     example.append(self.hand[nbcard].getValue())
 
