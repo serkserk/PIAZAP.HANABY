@@ -56,7 +56,7 @@ class Table:
 
     def displayField(self):
         print("Field :")
-        for i in range(self.field):
+        for i in range(len(self.field)):
             print(Bcolor.BOLD + Suit.toColor(i) + "\t" + Suit.toString(i), self.field[i], end="\t" + Bcolor.END)
         print()
 

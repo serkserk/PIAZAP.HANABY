@@ -33,7 +33,7 @@ def main(knowledgeBase=None, inputFile=None):
     while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
         currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
         Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
-        currentPlayer.promptAction(Hanabi.players, knowledgeBase)
+        currentPlayer.promptAction(knowledgeBase)
         turn += 1
         print("Current score: ", Hanabi.table.getScore())
         print()
