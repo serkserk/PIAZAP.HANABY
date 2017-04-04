@@ -30,12 +30,16 @@ def generatePlayableCard(seed=None):
     card = Card()
     card.setSuit(Suit(random.randint(1, 5)))
     card.setValue(fireWorks[Suit.toInt(card.getSuit()) - 1] + 1)
+    if card.getValue() == 6:
+        fireWorks[Suit.toInt(card.getSuit()) - 1] = random.randint(1, 4)
+        card.setValue(fireWorks[Suit.toInt(card.getSuit()) - 1] + 1)
     fireWorks.append(Suit.toInt(card.getSuit()))
     fireWorks.append(card.getValue())
     return fireWorks
 
 
 if __name__ == '__main__':
+
     import main
     nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
     kb = []
@@ -58,3 +62,5 @@ if __name__ == '__main__':
 
     print("Testing on random Knowledge Base :")
     print(nn.test(knowledgeBase=kb))
+
+    print(kb)
