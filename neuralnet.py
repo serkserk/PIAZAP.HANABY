@@ -123,7 +123,8 @@ class NeuralNetwork:
         for example, expectedValues in knowledgeBase:
             self.compute(example)
             for i in range(len(expectedValues)):
-                errors[i].append(abs(expectedValues[i] - self.getOutput()[i]))
+                output = 0 if self.getOutput()[i] < 0.5 else 1
+                errors[i].append(abs(expectedValues[i] - output))
         errors = [mean(l) for l in errors]
         return errors
 
