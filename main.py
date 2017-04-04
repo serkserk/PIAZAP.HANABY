@@ -7,10 +7,10 @@ import sys
 import os
 
 
-def main(net=None, inputFile=None):
+def main(knowledgeBase=None, inputFile=None):
     """ main function. contains the game loop.
         Args :
-            - net : a neural network to train on the game that is about to be played (optional)
+            - knowledgeBase : a Knowledge Base to fill with examples (optional)
     """
     colorama.init()
     #print(Bcolor.CLEAR)    # clear the screen
@@ -33,7 +33,7 @@ def main(net=None, inputFile=None):
     while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
         currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
         Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
-        currentPlayer.promptAction(Hanabi.players, net)
+        currentPlayer.promptAction(knowledgeBase)
         turn += 1
         print("Current score: ", Hanabi.table.getScore())
         print()

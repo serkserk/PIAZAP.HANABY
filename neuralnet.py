@@ -110,8 +110,22 @@ class NeuralNetwork:
     def getOutput(self):
         return self.layers[len(self.layers) - 1]
 
-    def train(self, player, table):
-        pass
+    def train(self, knowledgeBase, doTests=True):
+        for example, expectedValues in knowledgeBase:
+            self.compute(example)
+            self.backprop(expectedValues)
+        if doTests:
+            return self.test(knowledgeBase)
+
+    def test(self, knowledgeBase):
+        from statistics import mean
+        errors = [[] for i in self.getOutput()]
+        for example, expectedValues in knowledgeBase:
+            self.compute(example)
+            for i in range(len(expectedValues)):
+                errors[i].append(abs(expectedValues[i] - self.getOutput()[i]))
+        errors = [mean(l) for l in errors]
+        return errors
 
 
 def sigmoid(x):
