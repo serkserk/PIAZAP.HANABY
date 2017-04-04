@@ -27,12 +27,12 @@ class NeuralNetwork:
 
         for layer in neuronsPerLayer:  # initializing neuron self.layers with zeroes
             self.layers.append([])
-            for x in range(layer):
+            for _ in range(layer):
                 self.layers[len(self.layers) - 1].append(0)
 
         for i in range(len(self.layers) - 1):  # initializing connexions with random real values [-10, 10]
             self.connexions.append([])
-            for x in range(len(self.layers[i]) * len(self.layers[i + 1])):
+            for _ in range(len(self.layers[i]) * len(self.layers[i + 1])):
                 self.connexions[i].append(random.random() * 20 - 10)
             # the connexion from self.layers[i][j] to self.layers[i-1][k] is self.connexions[i-1][k*len(self.layers[i])+j]
             # the connexion from self.layers[i][j] to self.layers[i+1][k] is self.connexions[i][j*len(self.layers[i+1])+k]
@@ -41,7 +41,7 @@ class NeuralNetwork:
         self.biases.append(None)  # self.biases[0] corresponds to self.layers[0] which is the input layer ; however inputs do not have biases.
         for i in range(1, len(neuronsPerLayer)):  # initializing bias layers with random real values [-10, 10]
             self.biases.append([])
-            for x in range(neuronsPerLayer[i]):
+            for _ in range(neuronsPerLayer[i]):
                 self.biases[i].append(random.random() * 20 - 10)
 
     def compute(self, input):
@@ -119,7 +119,7 @@ class NeuralNetwork:
 
     def test(self, knowledgeBase):
         from statistics import mean
-        errors = [[] for i in self.getOutput()]
+        errors = [[] for _ in self.getOutput()]
         for example, expectedValues in knowledgeBase:
             self.compute(example)
             for i in range(len(expectedValues)):
