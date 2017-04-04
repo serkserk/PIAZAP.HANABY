@@ -91,3 +91,17 @@ class Suit(Enum):
             return 5
         else:
             return 6
+
+    def __str__(self):
+        if self == Suit.white:
+            return "white"
+        elif self == Suit.red:
+            return "red"
+        elif self == Suit.blue:
+            return "blue"
+        elif self == Suit.green:
+            return "green"
+        elif self == Suit.yellow:
+            return "yellow"
+        else:
+            return "unknown"

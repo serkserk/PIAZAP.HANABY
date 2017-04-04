@@ -57,7 +57,8 @@ class Table:
     def displayField(self):
         print("Field :")
         for i in range(len(self.field)):
-            print(Bcolor.BOLD + Suit.toColor(i) + "\t" + Suit.toString(i), self.field[i], end="\t" + Bcolor.END)
+            currentSuit = Suit(i + 1)
+            print(Bcolor.BOLD + Suit.toColor(currentSuit) + "\t" + str(currentSuit), self.field[i], end="\t" + Bcolor.END)
         print()
 
     def displayDiscarded(self):
