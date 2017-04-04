@@ -8,10 +8,8 @@ from bcolor import *
 
 class Table:
     def __init__(self):
-        self.field = {}
+        self.field = [0 for i in range(5)]
         self.discarded = []
-        for s in Suit.trueValues():
-            self.field[s] = 0
         self.hints = 8
         self.strikes = 3
         self.discardedDict = {'w1': 0, 'w2': 0, 'w3': 0, 'w4': 0, 'w5': 0,
@@ -21,8 +19,8 @@ class Table:
                               'y1': 0, 'y2': 0, 'y3': 0, 'y4': 0, 'y5': 0, }
 
     def place(self, c):
-        if self.field[c.getSuit()] == c.getValue() - 1:
-            self.field[c.getSuit()] = self.field[c.getSuit()] + 1
+        if self.field[Suit.toInt(c.getSuit()) - 1] == c.getValue() - 1:
+            self.field[Suit.toInt(c.getSuit()) - 1] += 1
         else:
             self.strikes -= 1
             print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
@@ -58,8 +56,8 @@ class Table:
 
     def displayField(self):
         print("Field :")
-        for s, v in self.field.items():
-            print(Bcolor.BOLD + Suit.toColor(s) + "\t" + Suit.toString(s), v, end="\t" + Bcolor.END)
+        for i in range(len(self.field)):
+            print(Bcolor.BOLD + Suit.toColor(i) + "\t" + Suit.toString(i), self.field[i], end="\t" + Bcolor.END)
         print()
 
     def displayDiscarded(self):
@@ -72,13 +70,13 @@ class Table:
         print()
 
     def getScore(self):
-        return sum(self.field.values())
+        return sum(self.field)
 
     def cardPlayable(self, card):
-        return self.field[card.getSuit()] == card.getValue() - 1
+        return self.field[Suit.toInt(card.getSuit()) - 1] == card.getValue() - 1
 
     def cardDiscardable(self, card):
-        if card.getValue() <= self.field[card.getSuit()]:
+        if card.getValue() <= self.field[Suit.toInt(card.getSuit()) - 1]:
             print("Dead card")
             return True
 
