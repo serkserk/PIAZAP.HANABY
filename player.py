@@ -41,7 +41,7 @@ class Player(object):
         hanabi.Hanabi.table.placeDiscard(c)
         hanabi.Hanabi.table.rechargeHint()
 
-    def promptAction(self, players, net=None):
+    def promptAction(self, players):
         """ This method prompts the player for action and carries said action out
         """
         # validAction is a boolean that loops on
@@ -57,8 +57,6 @@ class Player(object):
                 print("which card? ", end='')
                 answerCardId = input()  # the index of the card answered by the player
                 answerCard = self.hand[int(answerCardId)]
-                if net is not None:
-                    net.train(self, hanabi.Hanabi.table)
                 self.play(answerCard)
                 self.drawFrom(hanabi.Hanabi.deck)
             elif answer == "hint":
@@ -107,7 +105,7 @@ class PlayerRandom(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, players):
+    def promptAction(self):
         # validAction is a boolean that loops on
         # the menu while the action is invalid
         validAction = False
@@ -135,7 +133,7 @@ class PlayerRandomPlus(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, players):
+    def promptAction(self):
         nbcard = 0  # index of current card
         print("--------------")
         print("Trying to play... ")
@@ -157,7 +155,7 @@ class PlayerRandomPlusPlus(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, players, knowledgeBase=None):
+    def promptAction(self, knowledgeBase=None):
         nbcard = 0  # index of current card
         print("--------------")
         print("Trying to play... ")
@@ -169,14 +167,14 @@ class PlayerRandomPlusPlus(Player):
 
             if hanabi.Hanabi.table.cardPlayable(self.hand[nbcard]):
                 if knowledgeBase is not None:
-                    knowledgeBase.append((example, 1))
+                    knowledgeBase.append((example, [1]))
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
                 return  # finish if played a  card
             else:
                 if knowledgeBase is not None:
-                    knowledgeBase.append((example, 0))
+                    knowledgeBase.append((example, [0]))
             print(colorama.Fore.CYAN + "Could not play card: " + str(nbcard + 1) + Bcolor.END)
             nbcard += 1
         nbcard = 0

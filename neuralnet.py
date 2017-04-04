@@ -122,8 +122,8 @@ class NeuralNetwork:
         errors = [[] for i in self.getOutput()]
         for example, expectedValues in knowledgeBase:
             self.compute(example)
-            for i in range(expectedValues):
-                errors[i].append(abs(expectedValues[i]) - abs[self.getOutput()[i]])
+            for i in range(len(expectedValues)):
+                errors[i].append(abs(expectedValues[i] - self.getOutput()[i]))
         errors = [mean(l) for l in errors]
         return errors
 
