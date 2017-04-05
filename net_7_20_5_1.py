@@ -43,6 +43,13 @@ if __name__ == '__main__':
     import main
     nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
     kb = []
+    testKB = []
+
+    for i in range(1000):
+        inputs = generatePlayableCard()
+        testKB.append((inputs, [1]))
+        inputs = generateUnplayableCard()
+        testKB.append((inputs, [0]))
 
     main.blockPrint()
     for i in range(32):
@@ -51,16 +58,9 @@ if __name__ == '__main__':
 
     print("testing knowledgeBase on untrained network :")
     print(nn.test(knowledgeBase=kb))
+    print("Testing untrained on random Knowledge Base :")
+    print(nn.test(knowledgeBase=testKB))
     print("testing knowledgeBase on trained network :")
     print(nn.train(knowledgeBase=kb))
-
-    for i in range(1000):
-        inputs = generatePlayableCard()
-        kb.append((inputs, [1]))
-        inputs = generateUnplayableCard()
-        kb.append((inputs, [0]))
-
-    print("Testing on random Knowledge Base :")
-    print(nn.test(knowledgeBase=kb))
-
-    print(kb)
+    print("Testing trained on random Knowledge Base :")
+    print(nn.test(knowledgeBase=testKB))
