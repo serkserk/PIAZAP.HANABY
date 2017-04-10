@@ -105,7 +105,7 @@ class NeuralNetwork:
                     oh = self.layers[i][j]
                     Whz = self.connexions[i][j * len(self.layers[i + 1]) + k]
                     dh = oh * (1 - oh) * Whz * errorSignals[i + 1][k]
-                    errorSignals[i][j] = max(dh, errorSignals[i][j])
+                    errorSignals[i][j] += dh
 
     def getOutput(self):
         return self.layers[len(self.layers) - 1]
