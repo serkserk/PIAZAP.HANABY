@@ -84,7 +84,7 @@ class NeuralNetwork:
         for k in range(len(targetValues)):
             # error signal dk = (Tk-Ok) f'(Netk) = (Tk-Ok) f(Netk) (1-f(Netk)) = (Tk-Ok) Ok (1-Ok)
             dk = (targetValues[k] - outputLayer[k]) * outputLayer[k] * (1 - outputLayer[k])
-            errorSignals[len(errorSignals) - 1][k] = dk
+            errorSignals[-1][k] = dk
             for j in range(len(self.layers[len(self.layers) - 2])):  # for each neuron in the second-to-last layer
                 # connexion from current neuron of the second-to-last layer to current output neuron
                 WjkOld = self.connexions[len(self.layers) - 2][j * len(self.layers[len(self.layers) - 1]) + k]
@@ -133,33 +133,3 @@ def sigmoid(x):
     """ The sigmoid function
     """
     return 1 / (1 + math.exp(-x))
-
-
-"""
-if __name__ == '__main__':
-    import sys
-    bestSeed = (0, 100)  # will be used to store the best seed of the trial run
-
-    nIterations = 50
-    if len(sys.argv) == 2:
-        nIterations = int(sys.argv[1])
-
-    for i in range(nIterations):  # trying out nIterations seeds
-        random.seed(None)
-        seed = random.randint(-65536, 65535)  # randomly choosing a random seed
-        nn = NeuralNetwork(seed=seed)  # creating a neural network and initializing it with the chosen seed
-        trainHanabi(nn)
-        errors = []
-        for i in range(100):
-            nn.compute(generateGoodInstance())
-            errors.append(abs(1 - nn.getOutput()[0]))
-        for i in range(100):
-            nn.compute(generateBadInstance())
-            errors.append(abs(0 - nn.getOutput()[0]))
-        if mean(errors) < bestSeed[1]:
-            bestSeed = (seed, mean(errors))
-    with open("GoodSeeds.txt", "a") as file:
-        file.write(str(bestSeed))
-        file.write("\n")
-    print(bestSeed)
-"""

@@ -39,28 +39,32 @@ def generatePlayableCard(seed=None):
 
 
 if __name__ == '__main__':
-
-    import main
-    nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
-    kb = []
-    testKB = []
-
     for i in range(1000):
-        inputs = generatePlayableCard()
-        testKB.append((inputs, [1]))
-        inputs = generateUnplayableCard()
-        testKB.append((inputs, [0]))
+        seed = random.randint(-65536, 65535)
+        random.seed(seed)
+        nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1], learningStep=0.1)
+        kb = []
+        testKB = []
+        for i in range(10000):
+            kb.append((generatePlayableCard(), [1]))
+            kb.append((generateUnplayableCard(), [0]))
 
-    main.blockPrint()
-    for i in range(32):
-        main.main(knowledgeBase=kb, inputFile="trainfile.txt")
-    main.enablePrint()
+        for i in range(1000):
+            testKB.append((generatePlayableCard(), [1]))
+            testKB.append((generateUnplayableCard(), [0]))
 
-    print("testing knowledgeBase on untrained network :")
-    print(nn.test(knowledgeBase=kb))
-    print("Testing untrained on random Knowledge Base :")
-    print(nn.test(knowledgeBase=testKB))
-    print("testing knowledgeBase on trained network :")
-    print(nn.train(knowledgeBase=kb))
-    print("Testing trained on random Knowledge Base :")
-    print(nn.test(knowledgeBase=testKB))
+        untrainedErrorOnKB = nn.test(knowledgeBase=kb)
+        untrainedErrorOnTest = nn.test(knowledgeBase=testKB)
+        trainedErrorOnKB1 = nn.train(knowledgeBase=kb)
+        for _ in range(1000):
+            nn.train(knowledgeBase=kb, doTests=False)
+        trainedErrorOnKB1000 = nn.test(knowledgeBase=kb)
+        trainedErrorOnTest = nn.test(knowledgeBase=testKB)
+
+        print("untrainedErrorOnKB : ", untrainedErrorOnKB)
+        print("untrainedErrorOnTest : ", untrainedErrorOnTest)
+        print("trainedErrorOnKB1 : ", trainedErrorOnKB1)
+        print("trainedErrorOnKB1000 : ", trainedErrorOnKB1000)
+        print("trainedErrorOnTest : ", trainedErrorOnTest)
+        print("seed : ", seed)
+        print()

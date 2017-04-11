@@ -81,46 +81,6 @@ def generateBadSample():
     return [Suit.toInt(inputs[0]), inputs[1], inputs[2], inputs[3]]
 
 
-def generateUnplayableCard(seed=None):
-    random.seed(seed)
-    fireWorks = []
-    for i in range(5):
-        fireWorks.append(random.randint(0, 5))  # creating random firework values (intentionally normally distributed)
-    card = Card()
-    card.setSuit(Suit(random.randint(1, 5)))
-    forbiddenValue = fireWorks[Suit.toInt(card.getSuit()) - 1] + 1
-    card.setValue(random.randint(1, 5))
-    while card.getValue() == forbiddenValue:
-        card.setValue(random.randint(1, 5))
-    fireWorks.append(Suit.toInt(card.getSuit()))
-    fireWorks.append(card.getValue())
-    return fireWorks
-
-
-def generatePlayableCard(seed=None):
-    random.seed(seed)
-    fireWorks = []
-    for i in range(5):
-        fireWorks.append(random.randint(0, 5))  # creating random firework values (intentionally normally distributed)
-    card = Card()
-    card.setSuit(Suit(random.randint(1, 5)))
-    card.setValue(fireWorks[Suit.toInt(card.getSuit()) - 1] + 1)
-    fireWorks.append(Suit.toInt(card.getSuit()))
-    fireWorks.append(card.getValue())
-    return fireWorks
-
-
-def test(net, iterations=10000, seed=None):
-    from statistics import mean
-    errors = []
-    for i in range(iterations):
-        net.compute(generatePlayableCard(seed))
-        errors.append(abs(1 - net.getOutput()[0]))
-        net.compute(generateUnplayableCard(seed))
-        errors.append(abs(0 - net.getOutput()[0]))
-    return mean(errors)
-
-
 def test2(net, iterations=100000,):
     from statistics import mean
     errors = []
@@ -138,95 +98,58 @@ def test2(net, iterations=100000,):
     return mean(errors)
 
 
+def generateBadCombo(seed=None):
+    """ Generates two cards which can not be played on top of each other in the hanabi game
+    """
+    random.seed(seed)
+    fireWork = Card()
+    card = Card()
+    while fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1:
+        fireWork.setSuit(Suit(random.randint(1, 5)))
+        fireWork.setValue(random.randint(1, 5))
+        card.setSuit(Suit(random.randint(1, 5)))
+        card.setValue(random.randint(1, 5))
+    return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
+
+
+def generateGoodCombo(seed=None):
+    """ Generates two cards which can be played on top of each other in the hanabi game
+    """
+    random.seed(seed)
+    fireWork = Card()
+    card = Card()
+    while not (fireWork.getSuit() == card.getSuit() and fireWork.getValue() == card.getValue() - 1):
+        fireWork.setSuit(Suit(random.randint(1, 5)))
+        fireWork.setValue(random.randint(1, 5))
+        card.setSuit(Suit(random.randint(1, 5)))
+        card.setValue(random.randint(1, 5))
+    return (Suit.toInt(fireWork.getSuit()), fireWork.getValue(), Suit.toInt(card.getSuit()), card.getValue())
+
+
 if __name__ == '__main__':
-    # import main
-
-    # for i in range(10):
-    #     main.blockPrint()
-
-    #     weightSeed = random.randint(-65536, 65535)
-    #     random.seed(weightSeed)
-    #     nn = NeuralNetwork(neuronsPerLayer=[7, 20, 5, 1])
-    #     nn.train = train
-
-    #     trainSeed = random.randint(-65536, 65535)
-    #     random.seed(trainSeed)
-    #     iterations = 16  # base d'apprentissage ~ 10 000 exemples
-    #     try:
-    #         for i in range(iterations):
-    #             main.main(nn, "trainfile.txt")
-    #     except Exception as e:
-    #         main.enablePrint()
-    #         raise e
-
-    #     random.seed(trainSeed)
-    #     nn.train = testOnGame
-    #     nn.learnError = []
-    #     main.main(nn, "trainfile.txt")
-    #     main.enablePrint()
-    #     print("learn Error :", sum(nn.learnError) / len(nn.learnError))
-
-    #     testError = test(nn)
-    #     print("Test Error :", testError)
-
-    #     print(weightSeed, " ", trainSeed)
-
-    # learning
     nn = NeuralNetwork(neuronsPerLayer=[4, 4, 1])
-    # print("layers: ", nn.layers[0], "\n", nn.layers[1], "\n", nn.layers[2])
-    # print("biases: ", nn.biases[0], "\n", nn.biases[1], "\n", nn.biases[2])
-    # print("connexions: ", nn.connexions[0], "\n", nn.connexions[1])
-    print("start learning_______")
-    for i in range(100000):
-        # print(i, end="")
-        inputs = generateGoodSample()
-        c = Card(inputs[2], inputs[3])
-        nn.compute(inputs)
-        expectedValue = 1
-        nn.backprop([expectedValue])
-        # print("layers: ", nn.layers[0], "\n", nn.layers[1], "\n", nn.layers[2])
-        # print("biases: ", nn.biases[0], "\n", nn.biases[1], "\n", nn.biases[2])
-        # print("connexions: ", nn.connexions[0], "\n", nn.connexions[1])
-        # print(i, end="")
-        inputs = generateBadSample()
-        c = Card(inputs[2], inputs[3])
-        nn.compute(inputs)
-        expectedValue = 0
-        nn.backprop([expectedValue])
-        # print("layers: ", nn.layers[0], "\n", nn.layers[1], "\n", nn.layers[2])
-        # print("biases: ", nn.biases[0], "\n", nn.biases[1], "\n", nn.biases[2])
-        # print("connexions: ", nn.connexions[0], "\n", nn.connexions[1])
-    print("end learning_______")
-    # test learning
-    print("start test learning_______")
-    nn.learnError = []
-    for i in range(100000):
-        inputs = generateGoodSample()
-        c = Card(inputs[2], inputs[3])
-        nn.compute(inputs)
-        expectedValue = 1
-        output = nn.getOutput()[0]
-        if output > 0.5:
-            output = 1
-        else:
-            output = 0
-        nn.learnError.append(abs(expectedValue - output))
+    print(nn.connexions)
+    trainKB = []
+    testKB = []
+    for i in range(2000):
+        trainKB.append((generateGoodCombo(), [1]))
+        trainKB.append((generateBadCombo(), [0]))
+        testKB.append((generateGoodCombo(), [1]))
+        testKB.append((generateBadCombo(), [0]))
 
-        inputs = generateBadSample()
-        c = Card(inputs[2], inputs[3])
-        nn.compute(inputs)
-        expectedValue = 1
-        output = nn.getOutput()[0]
-        if output > 0.5:
-            output = 1
-        else:
-            output = 0
-        nn.learnError.append(abs(expectedValue - output))
-    # print(nn.learnError)
+    untrainedErrorOnKB = nn.test(knowledgeBase=trainKB)
+    untrainedErrorOnTest = nn.test(knowledgeBase=testKB)
+    trainedErrorOnKB1 = nn.train(knowledgeBase=trainKB)
+    for _ in range(100):
+        nn.train(knowledgeBase=trainKB, doTests=False)
     print()
-    print("________Learn error :", sum(nn.learnError) / len(nn.learnError))
-    print("end test learning_______")
+    trainedErrorOnKB1000 = nn.test(knowledgeBase=trainKB)
+    trainedErrorOnTest = nn.test(knowledgeBase=testKB)
 
-    # test
-    testError = test2(nn)
-    print("_______Test error :", testError)
+    print("untrainedErrorOnKB : ", untrainedErrorOnKB)
+    print("untrainedErrorOnTest : ", untrainedErrorOnTest)
+    print("trainedErrorOnKB1 : ", trainedErrorOnKB1)
+    print("trainedErrorOnKB1000 : ", trainedErrorOnKB1000)
+    print("trainedErrorOnTest : ", trainedErrorOnTest)
+    print(nn.connexions)
+    print()
