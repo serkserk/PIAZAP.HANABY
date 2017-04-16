@@ -92,6 +92,9 @@ class Suit(Enum):
         else:
             return 6
 
+    def __int__(self):
+        Suit.toInt(self)
+
     def __str__(self):
         if self == Suit.white:
             return "white"
