@@ -31,8 +31,8 @@ def generateIndispensableCard(seed=None):
     graveyard = [random.randint(0, 3) if i % 5 == 0 else (random.randint(0, 1) if i % 5 == 4 else random.randint(0, 2)) for i in range(25)]
     #            0-3 discarded if a 1                          0-1 discarded if a 5                 else 0-2 discarded
 
-    graveyard[(int(card.getSuit) - 1) * 5] = random.randint(0, 2)
-    for i in range((int(card.getSuit) - 1) * 5 + 1, int(card) - 1):
+    graveyard[(Suit.toInt(card.getSuit()) - 1) * 5] = random.randint(0, 2)
+    for i in range((Suit.toInt(card.getSuit()) - 1) * 5 + 1, int(card) - 1):
         graveyard[i] = random.randint(0, 1)
     graveyard[int(card) - 1] = 0 if card.getValue() == 5 else 2 if card.getValue() == 1 else 1
     #                            5 can't be discarded            must be the last 1         must be the last of its kind
