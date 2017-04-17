@@ -24,6 +24,12 @@ class Card:
     def toString(self):
         return Suit.toColor(self.suit) + " " + Suit.toString(self.suit) + " " + str(self.value) + Bcolor.END
 
+    def toBinary(self):
+        return pad([int(i) for i in str(bin(Suit.toInt(self.getSuit())))[2:]], 3) + pad([int(i) for i in str(bin(self.getValue()))[2:]], 3)
+
+    def __str__(self):
+        return self.toString()
+
     def __int__(self):
         """ overload of int() for easy value comparisons
             1 <= Suit.toInt(self.suit) <= 6
@@ -64,3 +70,8 @@ class Card:
         """ Overload of the != operator
         """
         return int(self) != int(other)
+
+
+def pad(x, size):
+    while len(x) < size:
+        x = [0] + x
