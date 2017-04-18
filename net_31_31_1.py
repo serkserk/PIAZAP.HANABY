@@ -35,32 +35,39 @@ def generateIndispensableCard(seed=None):
 
 
 if __name__ == '__main__':
+
     for i in range(10):
-        seed = random.randint(-65536, 65535)
+        seed = random.randint(-65536, 65535)  # -13920 good seed
         random.seed(seed)
+        print("seed : ", seed)
         nn = NeuralNetwork(neuronsPerLayer=[31, 31, 1], learningStep=0.1)
         kb = []
         testKB = []
         for i in range(10000):
             kb.append((generateDispensableCard(), [1]))
             kb.append((generateIndispensableCard(), [0]))
-
         for i in range(1000):
             testKB.append((generateDispensableCard(), [1]))
             testKB.append((generateIndispensableCard(), [0]))
 
         untrainedErrorOnKB = nn.test(knowledgeBase=kb)
-        untrainedErrorOnTest = nn.test(knowledgeBase=testKB)
-        trainedErrorOnKB1 = nn.train(knowledgeBase=kb)
-        for _ in range(1000):
-            nn.train(knowledgeBase=kb, doTests=False)
-        trainedErrorOnKB1000 = nn.test(knowledgeBase=kb)
-        trainedErrorOnTest = nn.test(knowledgeBase=testKB)
-
         print("untrainedErrorOnKB : ", untrainedErrorOnKB)
+
+        untrainedErrorOnTest = nn.test(knowledgeBase=testKB)
         print("untrainedErrorOnTest : ", untrainedErrorOnTest)
-        print("trainedErrorOnKB1 : ", trainedErrorOnKB1)
+
+        for i in range(1000):
+            test = False
+            if not i % 20:
+                test = True
+                trainedErrorOnKBi = nn.train(knowledgeBase=kb, doTests=test)
+                print("trainedErrorOnKB", i, " :", trainedErrorOnKBi)
+            else:
+                trainedErrorOnKBi = nn.train(knowledgeBase=kb, doTests=test)
+
+        trainedErrorOnKB1000 = nn.test(knowledgeBase=kb)
         print("trainedErrorOnKB1000 : ", trainedErrorOnKB1000)
+        trainedErrorOnTest = nn.test(knowledgeBase=testKB)
         print("trainedErrorOnTest : ", trainedErrorOnTest)
-        print("seed : ", seed)
+
         print()
