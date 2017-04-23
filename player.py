@@ -191,3 +191,55 @@ class PlayerRandomPlusPlus(Player):
             print(colorama.Fore.LIGHTMAGENTA_EX + "Could not find discardable card, random card: " + str(randDiscard) + Bcolor.END)
             self.discard(self.hand[randDiscard])
             self.drawFrom(hanabi.Hanabi.deck)
+
+
+class PlayerNet(Player):
+    def __init__(self, handSize, neuralNet):
+        Player.__init__(self, handSize)
+        self.net = neuralNet
+
+    def promptAction():
+        #################################################################################
+        ############### DO THIS FOR EVERY POSSIBLE MOVE THEN MAX(outputs) ###############
+        #################################################################################
+        inputs = []
+        for card in hanabi.Hanabi.table.field:  # adding the field cards in binary to inputs
+            inputs += pad([int(i) for i in str(bin(card.getValue()))[2:]], 3)
+
+        # adding a logical value for each card in the game saying whether it is discardable or not
+        discarded = []
+        for card in hanabi.Hanabi.table.discarded:
+            discarded.append(int(card))  # now we have all the discarded cards in int form ([1, 25])
+        discardable = [0 for _ in range(25)]
+        for card in discarded:
+            discardable[card - 1] += 1  # now we have the number of discarded cards of each type  # the -1 is to avoid out of bounds
+        # discardable is turned into a boolean array
+        # this doesn't take into account dead cards
+        for i in range(25):
+            if Card.getValueFromInt(i + 1) == 1:
+                discardable[i] = 1 if discardable[i] <= 1 else 0
+            elif Card.getValueFromInt(i + 1) == 5:
+                discardable[i] = 0
+            else:
+                discardable[i] = 1 if discardable[i] == 0 else 0
+        inputs += discardable
+
+        # length of deck (binary)
+        inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.deck.cardsLeft()))[2:]], 6)
+
+        # here there should be 3 bits for the number of turns left if the deck is empty
+
+        # current score in binary
+        inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.table.getScore()))[2:]], 6)
+
+        # number of strikes in binary
+        inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.table.strikes))[2:]], 2)
+
+        # cards in hand
+        for card in self.hand:
+            currentCardInfoBinary = card.toBinary()
+            currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardPlayable(card)))
+            currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDead(card)))
+            currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDiscardable(card)))
+
+        self.net.compute(inputs)

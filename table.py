@@ -76,9 +76,11 @@ class Table:
     def cardPlayable(self, card):
         return self.field[Suit.toInt(card.getSuit()) - 1] == card.getValue() - 1
 
+    def cardDead(self, card):
+        return card.getValue() <= self.field[Suit.toInt(card.getSuit()) - 1]
+
     def cardDiscardable(self, card):
-        if card.getValue() <= self.field[Suit.toInt(card.getSuit()) - 1]:
-            print("Dead card")
+        if self.cardDead(card):
             return True
 
         cardAttr = ""

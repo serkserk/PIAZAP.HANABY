@@ -12,8 +12,16 @@ class Card:
     def getSuit(self):
         return self.suit
 
+    @classmethod
+    def getSuitFromInt(cardID):
+        return Suit(int((cardID - 1) / 5) + 1)
+
     def getValue(self):
         return self.value
+
+    @classmethod
+    def getValueFromInt(cardID):
+        return ((cardID - 1) % 5) + 1
 
     def setSuit(self, suit):
         self.suit = suit
