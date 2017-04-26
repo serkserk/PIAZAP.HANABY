@@ -13,7 +13,7 @@ def main(knowledgeBase=None, inputFile=None):
             - knowledgeBase : a Knowledge Base to fill with examples (optional)
     """
     colorama.init()
-    #print(Bcolor.CLEAR)    # clear the screen
+    # print(Bcolor.CLEAR)    # clear the screen
     if inputFile is not None:
         inputFile = open(inputFile)
         sys.stdin = inputFile
@@ -25,8 +25,8 @@ def main(knowledgeBase=None, inputFile=None):
         playerTypeArray.append(Hanabi.promptPlayerType())
 
     Hanabi.initPlayers(nbPlayer, nbHand, playerTypeArray)
-    print()
-    print()
+    # print()
+    # print()
     turn = 0
     Hanabi.deck.sort()  # we may want the deck to be shuffled with a specific seed. Since the deck
     Hanabi.deck.shuffle()  # is already shuffled when the Hanabi class is loaded, we need to sort it first.
@@ -35,11 +35,11 @@ def main(knowledgeBase=None, inputFile=None):
         Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
         currentPlayer.promptAction(knowledgeBase)
         turn += 1
-        print("Current score: ", Hanabi.table.getScore())
-        print()
+        # print("Current score: ", Hanabi.table.getScore())
+        # print()
 
-    print(Bcolor.BOLD + colorama.Fore.CYAN + "Final score: ", Hanabi.table.getScore(), " in ", turn, " turns !" + Bcolor.END)
-    print()
+    # print(Bcolor.BOLD + colorama.Fore.CYAN + "Final score: ", Hanabi.table.getScore(), " in ", turn, " turns !" + Bcolor.END)
+    # print()
 
     if inputFile is not None:
         sys.stdin = sys.__stdin__

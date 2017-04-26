@@ -47,18 +47,18 @@ class Hanabi:
 
     @classmethod
     def promptPlayerType(cls):
-        print(colorama.Fore.LIGHTBLUE_EX + "Human(1), random(2), random+(3) or random++(4)? " + Bcolor.END, end='')
+        # print(colorama.Fore.LIGHTBLUE_EX + "Human(1), random(2), random+(3) or random++(4)? " + Bcolor.END, end='')
         playerType = input()
         return int(playerType)
 
     @classmethod
     def promptHandSize(cls):
-        print(colorama.Fore.LIGHTBLUE_EX + "Hand size : " + Bcolor.END, end='')
+        # print(colorama.Fore.LIGHTBLUE_EX + "Hand size : " + Bcolor.END, end='')
         handSize = input()
         return int(handSize)
 
     @classmethod
     def promptPlayers(cls):
-        print(colorama.Fore.LIGHTBLUE_EX + "How many players? " + Bcolor.END, end='')
+        # print(colorama.Fore.LIGHTBLUE_EX + "How many players? " + Bcolor.END, end='')
         playersNumber = input()
         return int(playersNumber)
