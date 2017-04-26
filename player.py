@@ -157,8 +157,8 @@ class PlayerRandomPlusPlus(Player):
 
     def promptAction(self, knowledgeBase=None):
         nbcard = 0  # index of current card
-        print("--------------")
-        print("Trying to play... ")
+        #print("--------------")
+        #print("Trying to play... ")
         for card in self.hand:
             if knowledgeBase is not None:
                     example = list(hanabi.Hanabi.table.field)
@@ -170,25 +170,25 @@ class PlayerRandomPlusPlus(Player):
                     knowledgeBase.append((example, [1]))
                 self.play(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
-                print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
+                #print(colorama.Fore.CYAN + "Playing card: " + str(nbcard + 1) + Bcolor.END)
                 return  # finish if played a  card
             else:
                 if knowledgeBase is not None:
                     knowledgeBase.append((example, [0]))
-            print(colorama.Fore.CYAN + "Could not play card: " + str(nbcard + 1) + Bcolor.END)
+            #print(colorama.Fore.CYAN + "Could not play card: " + str(nbcard + 1) + Bcolor.END)
             nbcard += 1
         nbcard = 0
         for card in self.hand:
             if hanabi.Hanabi.table.cardDiscardable(self.hand[nbcard]):
-                print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding card: " + str(nbcard + 1) + Bcolor.END)
+                #print(colorama.Fore.LIGHTMAGENTA_EX + "Discarding card: " + str(nbcard + 1) + Bcolor.END)
                 self.discard(self.hand[nbcard])
                 self.drawFrom(hanabi.Hanabi.deck)
                 return  # finish if discarded a  card
-            print(colorama.Fore.LIGHTMAGENTA_EX + "Could not discard card: " + str(nbcard + 1) + Bcolor.END)
+            #print(colorama.Fore.LIGHTMAGENTA_EX + "Could not discard card: " + str(nbcard + 1) + Bcolor.END)
             nbcard += 1
         else:  # discard a random card if cant find a discardable card
             randDiscard = randint(0, self.handCapacity - 1)
-            print(colorama.Fore.LIGHTMAGENTA_EX + "Could not find discardable card, random card: " + str(randDiscard) + Bcolor.END)
+            #print(colorama.Fore.LIGHTMAGENTA_EX + "Could not find discardable card, random card: " + str(randDiscard) + Bcolor.END)
             self.discard(self.hand[randDiscard])
             self.drawFrom(hanabi.Hanabi.deck)
 

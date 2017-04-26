@@ -28,7 +28,7 @@ class Table:
             self.field[Suit.toInt(c.getSuit()) - 1] += 1
         else:
             self.strikes -= 1
-            # print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
+            print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
 
     def placeDiscard(self, c):
         self.discarded.append(c)
@@ -47,12 +47,12 @@ class Table:
         return self.strikes > 0
 
     def display(self, players, currentPlayerIndex):
-        # print("Hints : ", self.hints)
-        # print("Strikes : ", self.strikes)
-        # print("Cards left in deck : ", hanabi.Hanabi.deck.cardsLeft())
+        print("Hints : ", self.hints)
+        print("Strikes : ", self.strikes)
+        print("Cards left in deck : ", hanabi.Hanabi.deck.cardsLeft())
         self.displayField()
         self.displayDiscarded()
-        # print("Hands:")
+        print("Hands:")
         for player in players:
             if player == players[currentPlayerIndex]:
                 player.displayKnownHand()
@@ -60,20 +60,20 @@ class Table:
                 player.displayHand()
 
     def displayField(self):
-        # print("Field :")
+        print("Field :")
         for i in range(len(self.field)):
             currentSuit = Suit(i + 1)
-            # print(Bcolor.BOLD + Suit.toColor(currentSuit) + "\t" + str(currentSuit), self.field[i], end="\t" + Bcolor.END)
-        # print()
+            print(Bcolor.BOLD + Suit.toColor(currentSuit) + "\t" + str(currentSuit), self.field[i], end="\t" + Bcolor.END)
+        print()
 
     def displayDiscarded(self):
-        # print("Discarded :")
+        print("Discarded :")
         if len(self.discarded) == 0:
-            # print("*no discard yet*")
+            print("*no discard yet*")
         else:
             for card in self.discarded:
-                # print(card.toString(), end="  ")
-        # print()
+                print(card.toString(), end="  ")
+        print()
 
     def getScore(self):
         return sum(self.field)

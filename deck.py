@@ -33,7 +33,7 @@ class Deck:
 
     def display(self):
         for i in self.deck:
-            # print(i.toString())
+            print(i.toString())
 
     def empty(self):
         return len(self.deck) <= 0

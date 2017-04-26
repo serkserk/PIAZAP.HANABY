@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 from hanabi import Hanabi
-from bcolor import Bcolor
+# from bcolor import Bcolor
 import colorama
 import sys
 import os
@@ -32,7 +32,7 @@ def main(knowledgeBase=None, inputFile=None):
     Hanabi.deck.shuffle()  # is already shuffled when the Hanabi class is loaded, we need to sort it first.
     while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
         currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
-        Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
+        # Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
         currentPlayer.promptAction(knowledgeBase)
         turn += 1
         # print("Current score: ", Hanabi.table.getScore())
