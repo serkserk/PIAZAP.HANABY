@@ -1,10 +1,12 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-from card import *
-import hanabi
-from random import randint
-from bcolor import *
 import colorama
+import copy
+import hanabi
+
+from bcolor import *
+from card import *
+from random import randint
 
 
 class Player(object):
@@ -200,17 +202,26 @@ class PlayerNet(Player):
 
     def promptAction():
         states = []
-        for _ in range(len(self.hand)):
-            
+        for i in range(len(self.hand)):
             states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand)))
+            states[-1].play(i)
+        for i in range(len(self.hand)):
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand)))
+            states[-1].discard(i)
 
-        bestState = states[0]
-        bestStateValue = getStateValue
-        for i in range(1, states):
-            if self.getStateValue(states[i]) > bestStateValue:
-                bestState = states[i]
+        stateValues = []
+        for s in states:
+            stateValues.append(self.value(s))
 
-    def getStateValue(self, state):
+        indexOfBestState = stateValues.index(max(stateValues))
+
+        if int(indexOfBestState / len(self.hand)) == 0:
+            self.play(self.hand[indexOfBestState % len(self.hand)])
+        else:
+            self.discard(self.hand[indexOfBestState % len(self.hand)])
+        self.drawFrom(hanabi.Hanabi.deck)
+
+    def value(self, state):
         inputs = []
         for card in state.field:  # adding the field cards in binary to inputs
             inputs += pad([int(i) for i in str(bin(card.getValue()))[2:]], 3)
@@ -256,8 +267,21 @@ class PlayerNet(Player):
 
 class State():
     def __init__(self, field, graveyard, cardsLeft, strikes, hand):
-        self.field = field
-        self.graveyard = graveyard
-        self.cardsLeft = cardsLeft
-        self.strikes = strikes
-        self.hand = hand
+        self.field = copy.copy(field)
+        self.graveyard = copy.copy(graveyard)
+        self.cardsLeft = copy.copy(cardsLeft)
+        self.strikes = copy.copy(strikes)
+        self.hand = copy.copy(hand)
+
+    def play(self, i):
+        c = self.hand[i]
+        if self.field[Suit.toInt(c.getSuit()) - 1] == c.getValue() - 1:
+            self.field[Suit.toInt(c.getSuit()) - 1] += 1
+            del self.hand[i]
+        else:
+            self.strikes -= 1
+            self.discard(i)
+
+    def discard(self, i):
+        self.graveyard.append(self.hand[i])
+        del self.hand[i]

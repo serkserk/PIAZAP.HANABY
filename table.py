@@ -4,7 +4,6 @@ from suit import *
 import hanabi
 import colorama
 from bcolor import *
-from copy import copy, deepcopy
 
 
 class Table:
@@ -29,8 +28,9 @@ class Table:
         else:
             self.strikes -= 1
             print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
+            self.discard(c)
 
-    def placeDiscard(self, c):
+    def discard(self, c):
         self.discarded.append(c)
 
     def useHint(self):
