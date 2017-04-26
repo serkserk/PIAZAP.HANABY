@@ -12,7 +12,7 @@ class NeuralNetwork:
             - connexions
     """
 
-    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=0.1):
+    def __init__(self, neuronsPerLayer=[4, 8, 1], learningStep=None):
         """ Constructor.
             Args:
                 - neuronsPerLayer : an array containing the number of neurons for each layer
@@ -24,12 +24,16 @@ class NeuralNetwork:
         self.connexions = []               # We can identify the neurons involved by the connexion's index.
         # This list contains the biases for each neuron. it corresponds perfectly self.layers,
         self.biases = []                   # i.e. self.biases[i][j] is the bias for self.layers[i][j]
-        self.step = learningStep           # the learning step, or Nu.
+        # the learning step, or Nu.
+        if learningStep is None:
+            self.step = [0.05 * 2 ** i for i in range(neuronsPerLayer)]  # each layer has a learning step of 0.05*2^i => layer 1 = 0.1, layer 2 = 0.2 etc. Layer 0 has 0.05 but we don't care about it
+        else:
+            self.step = learningStep
 
         for layer in neuronsPerLayer:  # initializing neuron self.layers with zeroes
             self.layers.append([])
             for _ in range(layer):
-                self.layers[len(self.layers) - 1].append(0)
+                self.layers[-1].append(0)
 
         for i in range(len(self.layers) - 1):  # initializing connexions with random real values [-10, 10]
             self.connexions.append([])
@@ -63,7 +67,7 @@ class NeuralNetwork:
                     netj += self.layers[i - 1][k] * self.connexions[i - 1][k * len(self.layers[i]) + j]  # netj += value * connexion
                 netj += self.biases[i][j]
                 self.layers[i][j] = sigmoid(netj)
-        return self.layers[len(self.layers) - 1]
+        return self.layers[-1]
 
     def backprop(self, targetValues):
         """ Backwards propagation algorithm.
@@ -72,7 +76,7 @@ class NeuralNetwork:
                 - targetValues : a list of values corresponding to what was expected of the output neurons.
                                 Must be the same size as the number of output neurons.
         """
-        outputLayer = self.layers[len(self.layers) - 1]
+        outputLayer = self.layers[-1]
         if len(targetValues) != len(outputLayer):
             raise ValueError("Target list length does not match number of output neurons in network")
 
@@ -86,11 +90,11 @@ class NeuralNetwork:
             # error signal dk = (Tk-Ok) f'(Netk) = (Tk-Ok) f(Netk) (1-f(Netk)) = (Tk-Ok) Ok (1-Ok)
             dk = (targetValues[k] - outputLayer[k]) * outputLayer[k] * (1 - outputLayer[k])
             errorSignals[-1][k] = dk
-            for j in range(len(self.layers[len(self.layers) - 2])):  # for each neuron in the second-to-last layer
+            for j in range(len(self.layers[-2])):  # for each neuron in the second-to-last layer
                 # connexion from current neuron of the second-to-last layer to current output neuron
-                WjkOld = self.connexions[len(self.layers) - 2][j * len(self.layers[len(self.layers) - 1]) + k]
-                WjkNew = WjkOld + self.step * dk * self.layers[len(self.layers) - 2][j]  # Wjk_old + Nu * Dk * Oj
-                self.connexions[len(self.layers) - 2][j * len(self.layers[len(self.layers) - 1]) + k] = WjkNew
+                WjkOld = self.connexions[len(self.layers) - 2][j * len(self.layers[-1]) + k]
+                WjkNew = WjkOld + self.step[-1] * dk * self.layers[-2][j]  # Wjk_old + Nu * Dk * Oj  with Nu depending on the current layer
+                self.connexions[len(self.layers) - 2][j * len(self.layers[-1]) + k] = WjkNew
 
         # backprop on the rest of the network
         for i in range(len(self.layers) - 2, -1, -1):  # for each layer from the second-to-last to the first (the last computed index being 0 since -1 is excluded)
@@ -99,7 +103,7 @@ class NeuralNetwork:
                     # update connexion
                     WhzOld = self.connexions[i][j * len(self.layers[i + 1]) + k]
                     dk = errorSignals[i + 1][k]
-                    WhzNew = WhzOld + self.step * dk * self.layers[i][j]
+                    WhzNew = WhzOld + self.step[i] * dk * self.layers[i][j]
                     self.connexions[i][j * len(self.layers[i + 1]) + k] = WhzNew
 
                     # determine error signal for current neuron
@@ -109,7 +113,7 @@ class NeuralNetwork:
                     errorSignals[i][j] += dh
 
     def getOutput(self):
-        return self.layers[len(self.layers) - 1]
+        return self.layers[-1]
 
     def train(self, knowledgeBase, doTests=True):
         for example, expectedValues in knowledgeBase:
