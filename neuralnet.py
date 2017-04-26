@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 import random
 import math
+import time
 
 
 class NeuralNetwork:
@@ -112,8 +113,12 @@ class NeuralNetwork:
 
     def train(self, knowledgeBase, doTests=True):
         for example, expectedValues in knowledgeBase:
+            t1 = time.time()
             self.compute(example)
+            t2 = time.time()
+            print("compute: ", t2 - t1)
             self.backprop(expectedValues)
+            print("backprop: ", time.time() - t2)
         if doTests:
             return self.test(knowledgeBase)
 

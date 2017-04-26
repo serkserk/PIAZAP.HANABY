@@ -4,11 +4,12 @@ from suit import *
 import hanabi
 import colorama
 from bcolor import *
+from copy import copy, deepcopy
 
 
 class Table:
     def __init__(self):
-        self.field = [0 for i in range(5)]
+        self.field = [0 for _ in range(5)]
         self.discarded = []
         self.hints = 8
         self.strikes = 3
@@ -17,6 +18,10 @@ class Table:
                               'r1': 0, 'r2': 0, 'r3': 0, 'r4': 0, 'r5': 0,
                               'g1': 0, 'g2': 0, 'g3': 0, 'g4': 0, 'g5': 0,
                               'y1': 0, 'y2': 0, 'y3': 0, 'y4': 0, 'y5': 0, }
+        self._fieldBkp = [0 for _ in range(5)]
+        self._discardedBkp = []
+        self._hintsBkp = 8
+        self._strikeBkp = 3
 
     def place(self, c):
         if self.field[Suit.toInt(c.getSuit()) - 1] == c.getValue() - 1:

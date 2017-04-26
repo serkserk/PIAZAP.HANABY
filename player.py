@@ -199,16 +199,25 @@ class PlayerNet(Player):
         self.net = neuralNet
 
     def promptAction():
-        #################################################################################
-        ############### DO THIS FOR EVERY POSSIBLE MOVE THEN MAX(outputs) ###############
-        #################################################################################
+        states = []
+        for _ in range(len(self.hand)):
+            
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand)))
+
+        bestState = states[0]
+        bestStateValue = getStateValue
+        for i in range(1, states):
+            if self.getStateValue(states[i]) > bestStateValue:
+                bestState = states[i]
+
+    def getStateValue(self, state):
         inputs = []
-        for card in hanabi.Hanabi.table.field:  # adding the field cards in binary to inputs
+        for card in state.field:  # adding the field cards in binary to inputs
             inputs += pad([int(i) for i in str(bin(card.getValue()))[2:]], 3)
 
         # adding a logical value for each card in the game saying whether it is discardable or not
         discarded = []
-        for card in hanabi.Hanabi.table.discarded:
+        for card in state.graveyard:
             discarded.append(int(card))  # now we have all the discarded cards in int form ([1, 25])
         discardable = [0 for _ in range(25)]
         for card in discarded:
@@ -236,10 +245,19 @@ class PlayerNet(Player):
         inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.table.strikes))[2:]], 2)
 
         # cards in hand
-        for card in self.hand:
+        for card in state.hand:
             currentCardInfoBinary = card.toBinary()
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardPlayable(card)))
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDead(card)))
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDiscardable(card)))
 
-        self.net.compute(inputs)
+        return self.net.compute(inputs)
+
+
+class State():
+    def __init__(self, field, graveyard, cardsLeft, strikes, hand):
+        self.field = field
+        self.graveyard = graveyard
+        self.cardsLeft = cardsLeft
+        self.strikes = strikes
+        self.hand = hand
