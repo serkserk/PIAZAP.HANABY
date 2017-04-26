@@ -40,7 +40,7 @@ if __name__ == '__main__':
         seed = random.randint(-65536, 65535)  # -13920 good seed
         random.seed(seed)
         print("seed : ", seed)
-        nn = NeuralNetwork(neuronsPerLayer=[31, 31, 1], learningStep=0.1)
+        nn = NeuralNetwork(neuronsPerLayer=[31, 31, 1])
         kb = []
         testKB = []
         for i in range(10000):

@@ -45,7 +45,7 @@ if __name__ == '__main__':
     for i in range(10):
         seed = random.randint(-65536, 65535)
         random.seed(seed)
-        nn = NeuralNetwork(neuronsPerLayer=[27, 50, 5, 1], learningStep=0.1)
+        nn = NeuralNetwork(neuronsPerLayer=[27, 50, 5, 1])
         kb = []
         testKB = []
         for i in range(10000):

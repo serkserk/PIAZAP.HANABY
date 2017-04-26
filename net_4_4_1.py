@@ -128,7 +128,6 @@ def generateGoodCombo(seed=None):
 
 if __name__ == '__main__':
     nn = NeuralNetwork(neuronsPerLayer=[4, 4, 1])
-    print(nn.connexions)
     trainKB = []
     testKB = []
     for i in range(2000):
@@ -151,5 +150,4 @@ if __name__ == '__main__':
     print("trainedErrorOnKB1 : ", trainedErrorOnKB1)
     print("trainedErrorOnKB1000 : ", trainedErrorOnKB1000)
     print("trainedErrorOnTest : ", trainedErrorOnTest)
-    print(nn.connexions)
     print()

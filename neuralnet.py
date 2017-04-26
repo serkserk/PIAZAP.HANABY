@@ -26,7 +26,7 @@ class NeuralNetwork:
         self.biases = []                   # i.e. self.biases[i][j] is the bias for self.layers[i][j]
         # the learning step, or Nu.
         if learningStep is None:
-            self.step = [0.05 * 2 ** i for i in range(neuronsPerLayer)]  # each layer has a learning step of 0.05*2^i => layer 1 = 0.1, layer 2 = 0.2 etc. Layer 0 has 0.05 but we don't care about it
+            self.step = [0.05 * 2 ** i for i in range(len(neuronsPerLayer))]  # each layer has a learning step of 0.05*2^i => layer 1 = 0.1, layer 2 = 0.2 etc. Layer 0 has 0.05 but we don't care about it
         else:
             self.step = learningStep
 
@@ -117,12 +117,12 @@ class NeuralNetwork:
 
     def train(self, knowledgeBase, doTests=True):
         for example, expectedValues in knowledgeBase:
-            t1 = time.time()
+            # t1 = time.time()
             self.compute(example)
-            t2 = time.time()
-            print("compute: ", t2 - t1)
+            # t2 = time.time()
+            # print("compute: ", t2 - t1)
             self.backprop(expectedValues)
-            print("backprop: ", time.time() - t2)
+            # print("backprop: ", time.time() - t2)
         if doTests:
             return self.test(knowledgeBase)
 
