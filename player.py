@@ -224,7 +224,7 @@ class PlayerNet(Player):
             self.discard(self.hand[indexOfBestState % len(self.hand)])
         self.drawFrom(hanabi.Hanabi.deck)
 
-        log.append(states[indexOfBestState])  # logging the states to learn later
+        self.log.append(states[indexOfBestState])  # logging the states to learn later
 
 
 class State():
@@ -293,5 +293,6 @@ class State():
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardPlayable(card)))
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDead(card)))
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDiscardable(card)))
+            inputs += currentCardInfoBinary
 
         return inputs

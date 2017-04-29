@@ -2,7 +2,6 @@
 #-*- coding: utf-8 -*-
 
 from main import neuralNetAutoMain
-import random
 
 from neuralnet import NeuralNetwork
 from statistics import mean
@@ -12,6 +11,7 @@ def log2kb(log, score):
     kb = []
     for state in log:
         kb.append((state.toInputs(), [score]))
+    return kb
 
 
 def trainOnGame(net):
@@ -36,6 +36,6 @@ if __name__ == '__main__':
         while mean(scores) < 20:
             scores[i % 10] = trainOnGame(nn)
             if i % 100 == 0:
-                file.write(mean(scores))
+                file.write(str(mean(scores)) + "; ")
             i += 1
         file.close()

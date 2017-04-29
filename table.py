@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 from suit import *
 import hanabi
-import colorama
+# import colorama
 from bcolor import *
 
 
@@ -27,7 +27,7 @@ class Table:
             self.field[Suit.toInt(c.getSuit()) - 1] += 1
         else:
             self.strikes -= 1
-            print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
+            # print(colorama.Fore.LIGHTRED_EX + "You got 1 strike! " + Bcolor.END)
             self.discard(c)
 
     def discard(self, c):
