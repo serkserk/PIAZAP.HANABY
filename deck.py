@@ -40,3 +40,6 @@ class Deck:
 
     def cardsLeft(self):
         return len(self.deck)
+
+    def __len__(self):
+        return len(self.deck)

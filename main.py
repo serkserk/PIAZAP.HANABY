@@ -51,19 +51,24 @@ def neuralNetAutoMain(neuralNet, nPlayers=3):
         It could be fused with main(), but that would imply harmonizing many behaviours arbitrarily.
     """
     from player import PlayerNet
-    players = [PlayerNet(4, neuralNet) for _ in range(nPlayers)]
     Hanabi.newGame()
     Hanabi.deck.sort()
     Hanabi.deck.shuffle()
+    players = [PlayerNet(4, neuralNet) for _ in range(nPlayers)]
     turn = 0
 
     def numberOfTurnsLeft(player, lastTurn):
         return nPlayers - players.index(player) if lastTurn else nPlayers + 1
 
     while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % nPlayers != 0) and Hanabi.table.getScore() < 25):
-        currentPlayer = Hanabi.players[turn % nPlayers]
+        currentPlayer = players[turn % nPlayers]
         currentPlayer.promptAction(numberOfTurnsLeft(currentPlayer, Hanabi.deck.empty()))
         turn += 1
+
+    log = []
+    for player in players:
+        log += player.log
+    return log
 
 
 # Disable

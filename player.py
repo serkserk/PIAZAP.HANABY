@@ -201,14 +201,15 @@ class PlayerNet(Player):
         Player.__init__(self, handSize)
         self.net = neuralNet
         self.log = []
+        self.drawFrom(hanabi.Hanabi.deck)
 
     def promptAction(self, nTurnsLeft):
         states = []
         for i in range(len(self.hand)):
-            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft)))
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft))
             states[-1].play(i)
         for i in range(len(self.hand)):
-            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft)))
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft))
             states[-1].discard(i)
 
         stateValues = []
@@ -248,10 +249,13 @@ class State():
         self.graveyard.append(self.hand[i])
         del self.hand[i]
 
+    def getScore(self):
+        return sum(self.field)
+
     def toInputs(self):
         inputs = []
         for card in self.field:  # adding the field cards in binary to inputs
-            inputs += pad([int(i) for i in str(bin(card.getValue()))[2:]], 3)
+            inputs += pad([int(i) for i in str(bin(card))[2:]], 3)
 
         # adding a logical value for each card in the game saying whether it is discardable or not
         discarded = []
@@ -272,13 +276,13 @@ class State():
         inputs += discardable
 
         # length of deck (binary)
-        inputs += pad([int(i) for i in str(bin(self.cardsLeft()))[2:]], 6)
+        inputs += pad([int(i) for i in str(bin(self.cardsLeft))[2:]], 6)
 
         # number of turns left in binary
         inputs += pad([int(i) for i in str(bin(self.nTurns))[2:]], 3)
 
         # current score in binary
-        inputs += pad([int(i) for i in str(bin(sum(self.field)))[2:]], 6)
+        inputs += pad([int(i) for i in str(bin(self.getScore()))[2:]], 6)
 
         # number of strikes in binary
         inputs += pad([int(i) for i in str(bin(self.strikes))[2:]], 2)

@@ -20,7 +20,7 @@ class Card:
         return self.value
 
     @classmethod
-    def getValueFromInt(cardID):
+    def getValueFromInt(cls, cardID):
         return ((cardID - 1) % 5) + 1
 
     def setSuit(self, suit):
