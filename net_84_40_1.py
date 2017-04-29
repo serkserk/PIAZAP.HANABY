@@ -1,9 +1,19 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
+import pickle
+import random
+
 from neuralnet import NeuralNetwork
 from statistics import mean
-import random
+
+
+def log2kb(file, score):
+    unpickler = pickle.Unpickler(file)
+    log = unpickler.load()
+    kb = []
+    for state in log:
+        kb.append((state.toInputs(), [score]))
 
 
 def trainOnGame(net):
@@ -23,7 +33,7 @@ if __name__ == '__main__':
         scores = [0 for _ in range(10)]
         i = 0
         while mean(scores) < 20:
-            scores[i % 10] = trainOnGame
+            scores[i % 10] = trainOnGame(nn)
             if i % 100 == 0:
                 file.write(mean(scores))
             i += 1

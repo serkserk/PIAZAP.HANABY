@@ -196,9 +196,15 @@ class PlayerRandomPlusPlus(Player):
 
 
 class PlayerNet(Player):
-    def __init__(self, handSize, neuralNet):
+    import pickle
+
+    def __init__(self, handSize, neuralNet, file="gamelog.kb"):
         Player.__init__(self, handSize)
         self.net = neuralNet
+        self.file = file
+        self.pickler = pickle.Pickler(file)
+        self.unpickler = pickle.Unpickler(file)
+        self.pickler.dump([])
 
     def promptAction():
         states = []
@@ -221,14 +227,43 @@ class PlayerNet(Player):
             self.discard(self.hand[indexOfBestState % len(self.hand)])
         self.drawFrom(hanabi.Hanabi.deck)
 
+        log = self.unpickler.load()
+        log.append(states[indexOfBestState])
+        self.pickler.dump(log)
+
     def value(self, state):
+        return self.net.compute(state.toInputs())
+
+
+class State():
+    def __init__(self, field, graveyard, cardsLeft, strikes, hand):
+        self.field = copy.copy(field)
+        self.graveyard = copy.copy(graveyard)
+        self.cardsLeft = copy.copy(cardsLeft)
+        self.strikes = copy.copy(strikes)
+        self.hand = copy.copy(hand)
+
+    def play(self, i):
+        c = self.hand[i]
+        if self.field[Suit.toInt(c.getSuit()) - 1] == c.getValue() - 1:
+            self.field[Suit.toInt(c.getSuit()) - 1] += 1
+            del self.hand[i]
+        else:
+            self.strikes -= 1
+            self.discard(i)
+
+    def discard(self, i):
+        self.graveyard.append(self.hand[i])
+        del self.hand[i]
+
+    def toInputs(self):
         inputs = []
-        for card in state.field:  # adding the field cards in binary to inputs
+        for card in self.field:  # adding the field cards in binary to inputs
             inputs += pad([int(i) for i in str(bin(card.getValue()))[2:]], 3)
 
         # adding a logical value for each card in the game saying whether it is discardable or not
         discarded = []
-        for card in state.graveyard:
+        for card in self.graveyard:
             discarded.append(int(card))  # now we have all the discarded cards in int form ([1, 25])
         discardable = [0 for _ in range(25)]
         for card in discarded:
@@ -256,32 +291,10 @@ class PlayerNet(Player):
         inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.table.strikes))[2:]], 2)
 
         # cards in hand
-        for card in state.hand:
+        for card in self.hand:
             currentCardInfoBinary = card.toBinary()
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardPlayable(card)))
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDead(card)))
             currentCardInfoBinary.append(int(hanabi.Hanabi.table.cardDiscardable(card)))
 
-        return self.net.compute(inputs)
-
-
-class State():
-    def __init__(self, field, graveyard, cardsLeft, strikes, hand):
-        self.field = copy.copy(field)
-        self.graveyard = copy.copy(graveyard)
-        self.cardsLeft = copy.copy(cardsLeft)
-        self.strikes = copy.copy(strikes)
-        self.hand = copy.copy(hand)
-
-    def play(self, i):
-        c = self.hand[i]
-        if self.field[Suit.toInt(c.getSuit()) - 1] == c.getValue() - 1:
-            self.field[Suit.toInt(c.getSuit()) - 1] += 1
-            del self.hand[i]
-        else:
-            self.strikes -= 1
-            self.discard(i)
-
-    def discard(self, i):
-        self.graveyard.append(self.hand[i])
-        del self.hand[i]
+        return inputs
