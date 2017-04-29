@@ -196,28 +196,24 @@ class PlayerRandomPlusPlus(Player):
 
 
 class PlayerNet(Player):
-    import pickle
 
-    def __init__(self, handSize, neuralNet, file="gamelog.kb"):
+    def __init__(self, handSize, neuralNet):
         Player.__init__(self, handSize)
         self.net = neuralNet
-        self.file = file
-        self.pickler = pickle.Pickler(file)
-        self.unpickler = pickle.Unpickler(file)
-        self.pickler.dump([])
+        self.log = []
 
-    def promptAction():
+    def promptAction(self, nTurnsLeft):
         states = []
         for i in range(len(self.hand)):
-            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand)))
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft)))
             states[-1].play(i)
         for i in range(len(self.hand)):
-            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand)))
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck, hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft)))
             states[-1].discard(i)
 
         stateValues = []
         for s in states:
-            stateValues.append(self.value(s))
+            stateValues.append(self.net.compute(s.toInputs()))
 
         indexOfBestState = stateValues.index(max(stateValues))
 
@@ -227,21 +223,17 @@ class PlayerNet(Player):
             self.discard(self.hand[indexOfBestState % len(self.hand)])
         self.drawFrom(hanabi.Hanabi.deck)
 
-        log = self.unpickler.load()
-        log.append(states[indexOfBestState])
-        self.pickler.dump(log)
-
-    def value(self, state):
-        return self.net.compute(state.toInputs())
+        log.append(states[indexOfBestState])  # logging the states to learn later
 
 
 class State():
-    def __init__(self, field, graveyard, cardsLeft, strikes, hand):
+    def __init__(self, field, graveyard, cardsLeft, strikes, hand, nTurnsLeft):
         self.field = copy.copy(field)
         self.graveyard = copy.copy(graveyard)
         self.cardsLeft = copy.copy(cardsLeft)
-        self.strikes = copy.copy(strikes)
+        self.strikes = strikes
         self.hand = copy.copy(hand)
+        self.nTurns = nTurnsLeft
 
     def play(self, i):
         c = self.hand[i]
@@ -280,15 +272,16 @@ class State():
         inputs += discardable
 
         # length of deck (binary)
-        inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.deck.cardsLeft()))[2:]], 6)
+        inputs += pad([int(i) for i in str(bin(self.cardsLeft()))[2:]], 6)
 
-        # here there should be 3 bits for the number of turns left if the deck is empty
+        # number of turns left in binary
+        inputs += pad([int(i) for i in str(bin(self.nTurns))[2:]], 3)
 
         # current score in binary
-        inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.table.getScore()))[2:]], 6)
+        inputs += pad([int(i) for i in str(bin(sum(self.field)))[2:]], 6)
 
         # number of strikes in binary
-        inputs += pad([int(i) for i in str(bin(hanabi.Hanabi.table.strikes))[2:]], 2)
+        inputs += pad([int(i) for i in str(bin(self.strikes))[2:]], 2)
 
         # cards in hand
         for card in self.hand:

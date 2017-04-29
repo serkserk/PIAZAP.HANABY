@@ -1,16 +1,13 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-import pickle
 import random
 
 from neuralnet import NeuralNetwork
 from statistics import mean
 
 
-def log2kb(file, score):
-    unpickler = pickle.Unpickler(file)
-    log = unpickler.load()
+def log2kb(log, score):
     kb = []
     for state in log:
         kb.append((state.toInputs(), [score]))
@@ -26,7 +23,7 @@ if __name__ == '__main__':
         seed = random.randint(-65536, 65535)  # -13920 good seed
         random.seed(seed)
         print("seed : ", seed)
-        nn = NeuralNetwork(neuronsPerLayer=[81, 40, 1])  # structure is not [93, 40, 1] because we're omitting the number of turns left on 3 bits for now
+        nn = NeuralNetwork(neuronsPerLayer=[84, 40, 1])  # structure is not [93, 40, 1] because we're omitting the number of turns left on 3 bits for now
 
         file = open("scores" + j + ".csv", mode='a')
 

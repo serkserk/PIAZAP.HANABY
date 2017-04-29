@@ -3,8 +3,8 @@
 from hanabi import Hanabi
 # from bcolor import Bcolor
 import colorama
-import sys
 import os
+import sys
 
 
 def main(knowledgeBase=None, inputFile=None):
@@ -12,7 +12,7 @@ def main(knowledgeBase=None, inputFile=None):
         Args :
             - knowledgeBase : a Knowledge Base to fill with examples (optional)
     """
-    colorama.init()
+    # colorama.init()
     # print(Bcolor.CLEAR)    # clear the screen
     if inputFile is not None:
         inputFile = open(inputFile)
@@ -44,6 +44,26 @@ def main(knowledgeBase=None, inputFile=None):
     if inputFile is not None:
         sys.stdin = sys.__stdin__
         inputFile.close()
+
+
+def neuralNetAutoMain(neuralNet, nPlayers=3):
+    """ This method is analogous to main() but is designed for training NeuralNet players.
+        It could be fused with main(), but that would imply harmonizing many behaviours arbitrarily.
+    """
+    from player import PlayerNet
+    players = [PlayerNet(4, neuralNet) for _ in range(nPlayers)]
+    Hanabi.newGame()
+    Hanabi.deck.sort()
+    Hanabi.deck.shuffle()
+    turn = 0
+
+    def numberOfTurnsLeft(player, lastTurn):
+        return nPlayers - players.index(player) if lastTurn else nPlayers + 1
+
+    while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % nPlayers != 0) and Hanabi.table.getScore() < 25):
+        currentPlayer = Hanabi.players[turn % nPlayers]
+        currentPlayer.promptAction(numberOfTurnsLeft(currentPlayer, Hanabi.deck.empty()))
+        turn += 1
 
 
 # Disable
