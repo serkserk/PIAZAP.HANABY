@@ -208,9 +208,11 @@ class PlayerNet(Player):
         for i in range(len(self.hand)):
             states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft))
             states[-1].play(i)
+            states[-1].hand.append(hanabi.Hanabi.deck[0])
         for i in range(len(self.hand)):
             states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft))
             states[-1].discard(i)
+            states[-1].hand.append(hanabi.Hanabi.deck[0])
 
         stateValues = []
         for s in states:
