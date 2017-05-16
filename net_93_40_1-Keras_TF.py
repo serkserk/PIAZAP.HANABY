@@ -25,8 +25,8 @@ def trainOnGame(net, model):
     # fit() method feeds states and target_f information to the model, which I explain below. You can ignore the rest parameters.
     # This training process makes the neural net to predict the reward value (target_f) from a certain state.
     for state in log:
-        kb = state.toInputs()
-        model.fit(kb, score, epochs=1, verbose=0)
+        kb = np.array(state.toInputs()).reshape(1, 93)
+        model.fit(kb, np.array(score).reshape(1, -1), epochs=1, verbose=0)
     print(score)
     return score
 

@@ -63,7 +63,7 @@ def neuralNetAutoMain(neuralNet, model=None, nPlayers=3):
     def numberOfTurnsLeft(player, lastTurn):
         return nPlayers - players.index(player)  # if lastTurn else nPlayers + 1
 
-    while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % nPlayers != 0) and Hanabi.table.getScore() < 25):
+    while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty()) and Hanabi.table.getScore() < 25):
         currentPlayer = players[turn % nPlayers]
         currentPlayer.promptAction(numberOfTurnsLeft(currentPlayer, Hanabi.deck.empty()))
         turn += 1
