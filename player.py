@@ -224,7 +224,10 @@ class PlayerNet(Player):
                 v = self.model.predict(np.array(s.toInputs()).reshape(-1, 93))
                 stateValues.append(v[0][0])
 
-        indexOfBestState = stateValues.index(max(stateValues))
+        if all(x == stateValues[0] for x in stateValues):
+            indexOfBestState = stateValues.index(random.choice(stateValues))
+        else:
+            indexOfBestState = stateValues.index(max(stateValues))
         if int(indexOfBestState / len(self.hand)) == 0:
             self.play(self.hand[indexOfBestState % len(self.hand)])
         else:
