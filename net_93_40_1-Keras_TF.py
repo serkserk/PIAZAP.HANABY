@@ -20,7 +20,7 @@ def log2kb(log, score):
 
 
 def trainOnGame(net, model):
-    log = neuralNetAutoMain(net)
+    log = neuralNetAutoMain(net, model)
     score = log[-1].getScore()
     # fit() method feeds states and target_f information to the model, which I explain below. You can ignore the rest parameters.
     # This training process makes the neural net to predict the reward value (target_f) from a certain state.
@@ -46,9 +46,7 @@ if __name__ == '__main__':
         model = Sequential()
         model.add(Dense(input_dim=93, units=40, activation="sigmoid"))
         model.add(Dense(units=1, activation="linear"))
-
         # model.summary()
-
         # sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
         sgd = optimizers.SGD(lr=0.01, clipvalue=0.5)
         # model.compile(loss='mean_squared_error', optimizer=sgd)
@@ -57,13 +55,10 @@ if __name__ == '__main__':
         scores = [0 for _ in range(5000)]
         i = 0
         while mean(scores) < 20:
-            scores[i % 5000] = trainOnGame(model)
+            scores[i % 5000] = trainOnGame(nn, model)
             if i % 5000 == 0:
                 with open("scores" + str(j) + ".csv", mode='a') as file:
                     file.write(str(mean(scores)) + ";")
             i += 1
             print(i, end="\t")
         file.close()
-
-# When you call predict() function on the model, the model will predict the reward of current state based on the data you trained.
-# prediction = model.predict(state)

@@ -46,7 +46,7 @@ def main(knowledgeBase=None, inputFile=None):
         inputFile.close()
 
 
-def neuralNetAutoMain(neuralNet, nPlayers=3):
+def neuralNetAutoMain(neuralNet, model=None, nPlayers=3):
     """ This method is analogous to main() but is designed for training NeuralNet players.
         It could be fused with main(), but that would imply harmonizing many behaviours arbitrarily.
     """
@@ -54,11 +54,14 @@ def neuralNetAutoMain(neuralNet, nPlayers=3):
     Hanabi.newGame()
     Hanabi.deck.sort()
     Hanabi.deck.shuffle()
-    players = [PlayerNet(4, neuralNet) for _ in range(nPlayers)]
+    if model is None:
+        players = [PlayerNet(4, neuralNet) for _ in range(nPlayers)]
+    else:
+        players = [PlayerNet(4, neuralNet, model) for _ in range(nPlayers)]
     turn = 0
 
     def numberOfTurnsLeft(player, lastTurn):
-        return nPlayers - players.index(player) if lastTurn else nPlayers + 1
+        return nPlayers - players.index(player)  # if lastTurn else nPlayers + 1
 
     while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % nPlayers != 0) and Hanabi.table.getScore() < 25):
         currentPlayer = players[turn % nPlayers]

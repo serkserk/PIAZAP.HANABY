@@ -3,6 +3,7 @@
 import colorama
 import copy
 import hanabi
+import numpy as np
 
 from bcolor import *
 from card import *
@@ -40,7 +41,7 @@ class Player(object):
     def discard(self, c):
         self.knownHand.remove(self.knownHand[self.hand.index(c)])
         self.hand.remove(c)
-        hanabi.Hanabi.table.placeDiscard(c)
+        hanabi.Hanabi.table.discard(c)
         hanabi.Hanabi.table.rechargeHint()
 
     def promptAction(self, players):
@@ -197,11 +198,12 @@ class PlayerRandomPlusPlus(Player):
 
 class PlayerNet(Player):
 
-    def __init__(self, handSize, neuralNet):
+    def __init__(self, handSize, neuralNet, model):
         Player.__init__(self, handSize)
         self.net = neuralNet
         self.log = []
         self.drawFrom(hanabi.Hanabi.deck)
+        self.model = model
 
     def promptAction(self, nTurnsLeft):
         states = []
@@ -216,8 +218,11 @@ class PlayerNet(Player):
 
         stateValues = []
         for s in states:
-            stateValues.append(self.net.compute(s.toInputs()))
-        #print(stateValues)
+            if self.model is None:
+                stateValues.append(self.net.compute(s.toInputs()))
+            else:
+                v = self.model.predict(np.array(s.toInputs()).reshape(-1, 93))
+                stateValues.append(v[0][0])
 
         indexOfBestState = stateValues.index(max(stateValues))
         if int(indexOfBestState / len(self.hand)) == 0:
