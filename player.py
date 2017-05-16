@@ -206,20 +206,20 @@ class PlayerNet(Player):
     def promptAction(self, nTurnsLeft):
         states = []
         for i in range(len(self.hand)):
-            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft))
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikes, self.hand, nTurnsLeft))
             states[-1].play(i)
-            states[-1].hand.append(hanabi.Hanabi.deck[0])
+            states[-1].hand.append(copy.deepcopy(hanabi.Hanabi.deck[0]))
         for i in range(len(self.hand)):
-            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikesLeft(), self.hand, nTurnsLeft))
+            states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikes, self.hand, nTurnsLeft))
             states[-1].discard(i)
-            states[-1].hand.append(hanabi.Hanabi.deck[0])
+            states[-1].hand.append(copy.deepcopy(hanabi.Hanabi.deck[0]))
 
         stateValues = []
         for s in states:
             stateValues.append(self.net.compute(s.toInputs()))
+        #print(stateValues)
 
         indexOfBestState = stateValues.index(max(stateValues))
-
         if int(indexOfBestState / len(self.hand)) == 0:
             self.play(self.hand[indexOfBestState % len(self.hand)])
         else:
@@ -231,11 +231,11 @@ class PlayerNet(Player):
 
 class State():
     def __init__(self, field, graveyard, cardsLeft, strikes, hand, nTurnsLeft):
-        self.field = copy.copy(field)
-        self.graveyard = copy.copy(graveyard)
-        self.cardsLeft = copy.copy(cardsLeft)
+        self.field = copy.deepcopy(field)
+        self.graveyard = copy.deepcopy(graveyard)
+        self.cardsLeft = copy.deepcopy(cardsLeft)
         self.strikes = strikes
-        self.hand = copy.copy(hand)
+        self.hand = copy.deepcopy(hand)
         self.nTurns = nTurnsLeft
 
     def play(self, i):
@@ -298,3 +298,13 @@ class State():
             inputs += currentCardInfoBinary
 
         return inputs
+
+    def cardListToStr(self, cards):
+        s = ''
+        for i in cards:
+            s += str(i)
+            s += '\n'
+        return s
+
+    def __str__(self):
+        return "field : " + str(self.field) + "\ngraveyard : " + self.cardListToStr(self.graveyard) + "\ncards left : " + str(self.cardsLeft) + "\nstrikes : " + str(self.strikes) + "\nhand : " + self.cardListToStr(self.hand) + "\nturns left : " + str(self.nTurns) + "\n"

@@ -38,7 +38,7 @@ class NeuralNetwork:
         for i in range(len(self.layers) - 1):  # initializing connexions with random real values [-10, 10]
             self.connexions.append([])
             for _ in range(len(self.layers[i]) * len(self.layers[i + 1])):
-                self.connexions[i].append(random.random() * 20 - 10)
+                self.connexions[i].append(random.random() * 2 - 1)
             # the connexion from self.layers[i][j] to self.layers[i-1][k] is self.connexions[i-1][k*len(self.layers[i])+j]
             # the connexion from self.layers[i][j] to self.layers[i+1][k] is self.connexions[i][j*len(self.layers[i+1])+k]
             # the neurons corresponding to self.connexions[i][j] are self.layers[i][j/len(self.layers[i+1])] and self.layers[i+1][j%len(self.layers[i+1])]
@@ -47,7 +47,7 @@ class NeuralNetwork:
         for i in range(1, len(neuronsPerLayer)):  # initializing bias layers with random real values [-10, 10]
             self.biases.append([])
             for _ in range(neuronsPerLayer[i]):
-                self.biases[i].append(random.random() * 20 - 10)
+                self.biases[i].append(random.random() * 2 - 1)
 
     def compute(self, input):
         """ Output value computation method.

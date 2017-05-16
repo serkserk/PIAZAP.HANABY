@@ -142,12 +142,12 @@ if __name__ == '__main__':
     for _ in range(100):
         nn.train(knowledgeBase=trainKB, doTests=False)
     print()
-    trainedErrorOnKB1000 = nn.test(knowledgeBase=trainKB)
+    trainedErrorOnKB100 = nn.test(knowledgeBase=trainKB)
     trainedErrorOnTest = nn.test(knowledgeBase=testKB)
 
     print("untrainedErrorOnKB : ", untrainedErrorOnKB)
     print("untrainedErrorOnTest : ", untrainedErrorOnTest)
     print("trainedErrorOnKB1 : ", trainedErrorOnKB1)
-    print("trainedErrorOnKB1000 : ", trainedErrorOnKB1000)
+    print("trainedErrorOnKB100 : ", trainedErrorOnKB100)
     print("trainedErrorOnTest : ", trainedErrorOnTest)
     print()
