@@ -12,6 +12,11 @@ import numpy as np
 
 
 def log2kb(log, score):
+    """ Transform the log from previous game to an array inputable onto the neural network.
+        Arg:
+            -log : array containing the best computed  move.
+             -score : score associated with the log.
+    """
     kb = []
     for state in log:
         kb.append((state.toInputs(), [score]))
@@ -19,6 +24,10 @@ def log2kb(log, score):
 
 
 def trainOnGame(model):
+    """ Play a game to save the best computed move and feed the neural network .
+        Arg:
+            -model : the keras neural network model.
+    """
     log = neuralNetAutoMain(model=model)
     score = log[-1].getScore()
     for state in log:
@@ -35,11 +44,11 @@ if __name__ == '__main__':
         seed = 1
         np.random.seed(seed)
 
-        model = Sequential()
-        model.add(Dense(input_dim=93, units=40, activation="sigmoid"))
-        model.add(Dense(units=1, activation="linear"))
-        sgd = optimizers.SGD(lr=0.01, clipvalue=0.5)
-        model.compile(loss="mse", optimizer=sgd, learning_rate=0.01)
+        model = Sequential()  # Creates the foundation of the layers.
+        model.add(Dense(input_dim=93, units=40, activation="sigmoid"))  # Dense is the basic form of a neural network layer, with input Layer of 93 and hidden Layer with 40 nodes
+        model.add(Dense(units=1, activation="linear"))  # Output layer with 1 nodes (score)
+        sgd = optimizers.SGD(lr=0.01, clipvalue=0.5)  # Stochastic gradient descent optimizer
+        model.compile(loss="mse", optimizer=sgd, learning_rate=0.01)  # Create the model based on the information above
 
         scores = [0 for _ in range(5000)]
         i = 0
