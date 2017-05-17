@@ -198,7 +198,7 @@ class PlayerRandomPlusPlus(Player):
 
 class PlayerNet(Player):
 
-    def __init__(self, handSize, neuralNet, model=None):
+    def __init__(self, handSize, neuralNet=None, model=None):
         Player.__init__(self, handSize)
         self.net = neuralNet
         self.log = []

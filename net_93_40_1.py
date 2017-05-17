@@ -15,7 +15,7 @@ def log2kb(log, score):
 
 
 def trainOnGame(net):
-    log = neuralNetAutoMain(net)
+    log = neuralNetAutoMain(neuralNet=net)
     score = log[-1].getScore()
     net.train(log2kb(log, score), doTests=False)
     print(score)
@@ -25,15 +25,13 @@ def trainOnGame(net):
 if __name__ == '__main__':
 
     for j in range(10):
-        # seed = random.randint(-65536, 65535)  # -13920 good seed
-        # random.seed(seed)
-        # print("seed : ", seed)
-        nn = NeuralNetwork(neuronsPerLayer=[93, 40, 1])  # structure is not [93, 40, 1] because we're omitting the number of turns left on 3 bits for now
+
+        nn = NeuralNetwork(neuronsPerLayer=[93, 40, 1])
 
         scores = [0 for _ in range(5000)]
         i = 0
         while mean(scores) < 20:
-            scores[i % 5000] = trainOnGame(nn)
+            scores[i % 5000] = trainOnGame(net=nn)
             if i % 5000 == 0:
                 with open("scores" + str(j) + ".csv", mode='a') as file:
                     file.write(str(mean(scores)) + ";")
