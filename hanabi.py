@@ -22,6 +22,8 @@ class Hanabi:
 
     @classmethod
     def initPlayers(cls, nbPlayer, nbHand, playerTypeArray):
+        """ Player that try to play playable card.
+        """
         Hanabi.newGame()
         playersNumber = nbPlayer
         handSize = nbHand

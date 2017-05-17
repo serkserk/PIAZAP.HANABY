@@ -7,6 +7,10 @@ import random
 
 
 class Suit(Enum):
+    """
+    Color of the cards.
+    """
+
     white = 1
     red = 2
     blue = 3

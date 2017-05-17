@@ -11,6 +11,10 @@ from random import randint
 
 
 class Player(object):
+    """
+    The basic human player.
+    """
+
     def __init__(self, handSize):
         self.handCapacity = handSize
         self.hand = []
@@ -105,6 +109,10 @@ class Player(object):
 
 
 class PlayerRandom(Player):
+    """
+    Player that play randomly.
+    """
+
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
@@ -133,6 +141,10 @@ class PlayerRandom(Player):
 
 
 class PlayerRandomPlus(Player):
+    """
+    Player that try to play playable card.
+    """
+
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
@@ -155,6 +167,10 @@ class PlayerRandomPlus(Player):
 
 
 class PlayerRandomPlusPlus(Player):
+    """
+    Player that try to play playable card and dicard correctly.
+    """
+
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
@@ -197,6 +213,9 @@ class PlayerRandomPlusPlus(Player):
 
 
 class PlayerNet(Player):
+    """
+    Player that play with the help of the neural network.
+    """
 
     def __init__(self, handSize, neuralNet=None, model=None):
         Player.__init__(self, handSize)
@@ -238,6 +257,10 @@ class PlayerNet(Player):
 
 
 class State():
+    """
+    Copy the state of the game to try all the moves so we don't touch the real game.
+    """
+
     def __init__(self, field, graveyard, cardsLeft, strikes, hand, nTurnsLeft):
         self.field = copy.deepcopy(field)
         self.graveyard = copy.deepcopy(graveyard)

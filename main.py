@@ -74,13 +74,15 @@ def neuralNetAutoMain(neuralNet=None, model=None, nPlayers=3):
     return log
 
 
-# Disable
 def blockPrint():
+    """ Redirect the output so we don't see printing.
+    """
     sys.stdout = open(os.devnull, 'w')
 
 
-# Restore
 def enablePrint():
+    """ Restrore the output so we can see the printing.
+    """
     sys.stdout = sys.__stdout__
     colorama.init()
 

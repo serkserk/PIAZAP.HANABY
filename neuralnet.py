@@ -113,9 +113,17 @@ class NeuralNetwork:
                     errorSignals[i][j] += dh
 
     def getOutput(self):
+        """
+        Return the network's output value
+        """
         return self.layers[-1]
 
     def train(self, knowledgeBase, doTests=True):
+        """
+        Train the neural network
+        Args:
+            -knowledgeBase: input for the neural network.
+        """
         for example, expectedValues in knowledgeBase:
             # t1 = time.time()
             self.compute(example)

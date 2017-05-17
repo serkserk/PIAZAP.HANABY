@@ -12,10 +12,11 @@ import numpy as np
 
 
 def log2kb(log, score):
-    """ Transform the log from previous game to an array inputable onto the neural network.
-        Arg:
-            -log : array containing the best computed  move.
-             -score : score associated with the log.
+    """
+    Transform the log from previous game to an array understandable by the neural network.
+    Arg:
+        -log : array containing the states a game has been in.
+        -score : score of the game associated with the log.
     """
     kb = []
     for state in log:
@@ -24,9 +25,10 @@ def log2kb(log, score):
 
 
 def trainOnGame(model):
-    """ Play a game to save the best computed move and feed the neural network .
-        Arg:
-            -model : the keras neural network model.
+    """
+    Play a game to save the best computed moves and feed the neural network .
+    Arg:
+        -model : the keras neural network model.
     """
     log = neuralNetAutoMain(model=model)
     score = log[-1].getScore()

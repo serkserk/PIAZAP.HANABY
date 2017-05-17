@@ -5,6 +5,10 @@ from bcolor import *
 
 
 class Card:
+    """
+    Card for the Hanabi game.
+    """
+
     def __init__(self, suit=Suit.unknown, value=0):
         self.value = value
         self.suit = suit

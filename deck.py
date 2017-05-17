@@ -6,6 +6,10 @@ from card import *
 
 
 class Deck:
+    """
+    Deck of the Hanabi game.
+    """
+
     N_SHUFFLES = 100
 
     def __init__(self):

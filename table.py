@@ -7,6 +7,10 @@ from bcolor import *
 
 
 class Table:
+    """
+    Table of the Hanabi game
+    """
+
     def __init__(self):
         self.field = [0 for _ in range(5)]
         self.discarded = []
@@ -23,6 +27,11 @@ class Table:
         self._strikeBkp = 3
 
     def place(self, c):
+        """
+        Place a card on the field.
+        Arg:
+            -c: card to place
+        """
         if self.field[Suit.toInt(c.getSuit()) - 1] == c.getValue() - 1:
             self.field[Suit.toInt(c.getSuit()) - 1] += 1
         else:
@@ -31,22 +40,45 @@ class Table:
             self.discard(c)
 
     def discard(self, c):
+        """
+        Discard a card on the discarded field.
+        Arg:
+            -c: card to discard
+        """
         self.discarded.append(c)
 
     def useHint(self):
+        """
+        Use a hint to get either the color of the heigh of a card
+        """
         self.hints = self.hints - 1
 
     def rechargeHint(self):
+        """
+        Regain 1 hint of discarding 1 card.
+        """
         if self.hints < 8:
             self.hints = self.hints + 1
 
     def hintsLeft(self):
+        """
+        Get the number of hint left (8 max)
+        """
         return self.hints > 0
 
     def strikesLeft(self):
+        """
+        Get the number of strike left (3 max)
+        """
         return self.strikes > 0
 
     def display(self, players, currentPlayerIndex):
+        """
+        Print numerous information about the game (hint, strike, card left in deck, field, discared card, playrs hand, score).
+        Arg:
+            -players: list of players playing
+            -currentPlayerIndex: player currently playing
+        """
         print("Hints : ", self.hints)
         print("Strikes : ", self.strikes)
         print("Cards left in deck : ", hanabi.Hanabi.deck.cardsLeft())
@@ -60,6 +92,9 @@ class Table:
                 player.displayHand()
 
     def displayField(self):
+        """
+        Print the field of fireworks
+        """
         print("Field :")
         for i in range(len(self.field)):
             currentSuit = Suit(i + 1)
@@ -67,6 +102,9 @@ class Table:
         print()
 
     def displayDiscarded(self):
+        """
+        Print the discarded cards
+        """
         print("Discarded :")
         if len(self.discarded) == 0:
             print("*no discard yet*")
@@ -76,15 +114,27 @@ class Table:
         print()
 
     def getScore(self):
+        """
+        return the score of the game
+        """
         return sum(self.field)
 
     def cardPlayable(self, card):
+        """
+        Return a boolean if a card is playable or not
+        """
         return self.field[Suit.toInt(card.getSuit()) - 1] == card.getValue() - 1
 
     def cardDead(self, card):
+        """
+        Return a boolean if a card is dead or not
+        """
         return card.getValue() <= self.field[Suit.toInt(card.getSuit()) - 1]
 
     def cardDiscardable(self, card):
+        """
+        Return a boolean if a card is discardable or not
+        """
         if self.cardDead(card):
             return True
 

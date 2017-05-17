@@ -3,6 +3,10 @@
 
 
 class Bcolor:
+    """
+    Definition of color we want to use on the console when printing.
+    """
+
     BLUE = '\033[94m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
