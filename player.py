@@ -48,7 +48,7 @@ class Player(object):
         hanabi.Hanabi.table.discard(c)
         hanabi.Hanabi.table.rechargeHint()
 
-    def promptAction(self, players):
+    def promptAction(self, knowledgeBase=None, nTurnsLeft=0, players=None):
         """ This method prompts the player for action and carries said action out
         """
         # validAction is a boolean that loops on
@@ -116,7 +116,7 @@ class PlayerRandom(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self):
+    def promptAction(self, knowledgeBase=None, nTurnsLeft=0, players=None):
         # validAction is a boolean that loops on
         # the menu while the action is invalid
         validAction = False
@@ -148,7 +148,7 @@ class PlayerRandomPlus(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self):
+    def promptAction(self, knowledgeBase=None, nTurnsLeft=0, players=None):
         nbcard = 0  # index of current card
         print("--------------")
         print("Trying to play... ")
@@ -174,7 +174,7 @@ class PlayerRandomPlusPlus(Player):
     def __init__(self, handSize):
         Player.__init__(self, handSize)
 
-    def promptAction(self, knowledgeBase=None):
+    def promptAction(self, knowledgeBase=None, nTurnsLeft=0, players=None):
         nbcard = 0  # index of current card
         # print("--------------")
         # print("Trying to play... ")
@@ -224,7 +224,7 @@ class PlayerNet(Player):
         self.drawFrom(hanabi.Hanabi.deck)
         self.model = model
 
-    def promptAction(self, nTurnsLeft):
+    def promptAction(self, knowledgeBase=None, nTurnsLeft=5):
         states = []
         for i in range(len(self.hand)):
             states.append(State(hanabi.Hanabi.table.field, hanabi.Hanabi.table.discarded, len(hanabi.Hanabi.deck), hanabi.Hanabi.table.strikes, self.hand, nTurnsLeft))

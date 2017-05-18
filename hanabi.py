@@ -4,6 +4,7 @@ from deck import *
 from table import *
 from player import *
 from bcolor import *
+from keras.models import load_model
 import colorama
 
 
@@ -38,6 +39,9 @@ class Hanabi:
                 cls.players.append(PlayerRandomPlus(handSize))
             elif playerType == 4:
                 cls.players.append(PlayerRandomPlusPlus(handSize))
+            elif playerType == 5:
+                nn = load_model("NeuralNetPlayer.pkl")
+                cls.players.append(PlayerNet(handSize, model=nn))
             cls.players[i].drawFrom(cls.deck)
 
     @classmethod
@@ -49,18 +53,18 @@ class Hanabi:
 
     @classmethod
     def promptPlayerType(cls):
-        # print(colorama.Fore.LIGHTBLUE_EX + "Human(1), random(2), random+(3) or random++(4)? " + Bcolor.END, end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "Human(1), random(2), random+(3) or random++(4)? " + Bcolor.END, end='')
         playerType = input()
         return int(playerType)
 
     @classmethod
     def promptHandSize(cls):
-        # print(colorama.Fore.LIGHTBLUE_EX + "Hand size : " + Bcolor.END, end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "Hand size : " + Bcolor.END, end='')
         handSize = input()
         return int(handSize)
 
     @classmethod
     def promptPlayers(cls):
-        # print(colorama.Fore.LIGHTBLUE_EX + "How many players? " + Bcolor.END, end='')
+        print(colorama.Fore.LIGHTBLUE_EX + "How many players? " + Bcolor.END, end='')
         playersNumber = input()
         return int(playersNumber)
