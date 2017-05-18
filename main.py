@@ -34,7 +34,7 @@ def main(knowledgeBase=None, inputFile=None):
     turn = 0
     Hanabi.deck.sort()  # we may want the deck to be shuffled with a specific seed. Since the deck
     Hanabi.deck.shuffle()  # is already shuffled when the Hanabi class is loaded, we need to sort it first.
-    while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty() or turn % len(Hanabi.players) != 0) and Hanabi.table.getScore() < 25):
+    while(Hanabi.table.strikesLeft() and (not Hanabi.deck.empty()) and Hanabi.table.getScore() < 25):
         currentPlayer = Hanabi.players[turn % len(Hanabi.players)]
         Hanabi.table.display(Hanabi.players, turn % len(Hanabi.players))
         currentPlayer.promptAction(nTurnsLeft=numberOfTurnsLeft(currentPlayer, Hanabi.deck.empty()))
