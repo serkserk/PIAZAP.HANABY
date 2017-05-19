@@ -40,7 +40,6 @@ if __name__ == '__main__':
     # model.compile(loss='mean_squared_error', optimizer=sgd)
     model.compile(loss="mse", optimizer=sgd, learning_rate=0.01)
 
-    for _ in range(50):
+    for _ in range(25000):
         trainOnGame(model)
     model.save("NeuralNetPlayer.pkl")
-
