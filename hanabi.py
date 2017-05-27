@@ -4,7 +4,6 @@ from deck import *
 from table import *
 from player import *
 from bcolor import *
-from keras.models import load_model
 import colorama
 
 
@@ -40,6 +39,7 @@ class Hanabi:
             elif playerType == 4:
                 cls.players.append(PlayerRandomPlusPlus(handSize))
             elif playerType == 5:
+                from keras.models import load_model
                 nn = load_model("NeuralNetPlayer.pkl")
                 cls.players.append(PlayerNet(handSize, model=nn))
             cls.players[i].drawFrom(cls.deck)
